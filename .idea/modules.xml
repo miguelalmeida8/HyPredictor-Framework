@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Hybrid_Approach_Metro_Dataset.iml" filepath="$PROJECT_DIR$/.idea/Hybrid_Approach_Metro_Dataset.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Hybrid_Approach.iml" filepath="$PROJECT_DIR$/.idea/Hybrid_Approach.iml" />
     </modules>
   </component>
 </project>
