@@ -52,7 +52,7 @@ failure_report_data = {
         '5/30/2020 06:00', '6/01/2020 15:40', '6/03/2020 11:00', '6/05/2020 23:59', '6/06/2020 23:59', '6/07/2020 14:30',
         '7/08/2020 19:00', '7/15/2020 19:00', '7/17/2020 05:30'],
     'Failure': ['Air leak', 'Air Leak', 'Air Leak', 'Air Leak', 'Air leak', 'Air Leak', 'Air Leak', 'Air Leak', 'Air leak', 'Air Leak', 'Air Leak', 'Air Leak', 'Air leak', 'Air Leak', 'Air Leak', 'Air Leak', 'Air leak', 'Air Leak', 'Air Leak', 'Air Leak', 'Air Leak'],
-    'Severity': ['High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress'],
+    'Severity': ['High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'High stress', 'Medium stress', 'High stress'],
 }
 
 failure_report_df = pd.DataFrame(failure_report_data)
@@ -62,7 +62,7 @@ failure_report_df['Start Time'] = pd.to_datetime(failure_report_df['Start Time']
 failure_report_df['End Time'] = pd.to_datetime(failure_report_df['End Time'])
 
 # Adjust for timezone if needed
-failure_report_df['Start Time'] -= pd.Timedelta(hours=1)
+failure_report_df['Start Time'] -= pd.Timedelta(hours=2)
 
 # Database details
 db_host = 'db.fe.up.pt'
