@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+    <?php
+    session_set_cookie_params(0);
+    session_start();
+
+    require_once "../php/config.php";
+    $stats = $_SESSION['stats'];
+    if ($stats !== false) {
+        // Access the elements of $stats
+        if($stats['failure'] == 0) $failure_prediction = "No Failure";
+        else $failure_prediction = "Failure";
+        $oil_temperature = number_format($stats['oil_temperature'], 3);
+        $dv_pressure = number_format($stats['dv_pressure'], 3);
+        $motor_current = number_format($stats['motor_current'], 3);
+        $TP2 = number_format($stats['tp2'], 3);
+        $TP3 = number_format($stats['tp3'], 3);
+    }
+    ?>
+    <div class="container">
+
+        <!-- Left side -->
+        <leftside>
+            <div class="top">
+                <div class="logo">
+                    <h2>DIGI2 Lab</h2>
+                </div>
+                <div class="close">
+                    <span class="material-symbols-sharp"> close </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="{{ url_for('index') }}" class="active">
+                    <span class="material-symbols-sharp">grid_view</span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a href="#">
+                    <span class="material-symbols-sharp">insights</span>
+                    <h3>Analytics</h3>
+                </a>
+                <a href="{{ url_for('add_failure_report') }}">
+                    <span class="material-symbols-sharp">add</span>
+                    <h3>Add Failure Report</h3>
+                </a>
+                <a href="{{ url_for('show_rules') }}">
+                    <span class="material-symbols-sharp">data_check</span>
+                    <h3>Show Rules</h3>
+                </a>
+                <a href="{{ url_for('open_page_add_rule') }}">
+                    <span class="material-symbols-sharp">add</span>
+                    <h3>Add New Rule</h3>
+                </a>
+                <a href="#">
+                    <span class="material-symbols-sharp">logout</span>
+                    <h3>Logout</h3>
+                </a>
+
+            </div>
+        </leftside>
+
+        <!-- Middle side -->
+        <main>
+            <h1>Dashboard</h1>
+
+            <div class="dashboards">
+                <div class="failure_prediction">
+                    <h1>Failure Prediction</h1>
+                    <h2 class="{% if prediction == 1 %}failure{% else %}no_failure{% endif %}">
+                        {% if prediction == 1 %}
+                            Failure
+                        {% else %}
+                            No Failure
+                        {% endif %}
+                    </h2>
+                </div>
+                <div class="temperature">
+                    <h1>Oil Temperature</h1>
+                    <h2>{{ "{:.3f}".format(oil_temperature) }}°</h2>
+                </div>
+                <div class="dv_pressure">
+                    <h1>DV pressure</h1>
+                    <h2>{{ "{:.3f}".format(dv_pressure) }} Bar</h2>
+                </div>
+                <div class="motor_current">
+                    <h1>Motor current</h1>
+                    <h2>{{ "{:.3f}".format(motor_current) }} A</h2>
+                </div>
+                <div class="tp2">
+                    <h1>TP2</h1>
+                    <h2>{{ "{:.3f}".format(TP2) }} Bar</h2>
+                </div>
+                <div class="towers">
+                    <h1>Towers</h1>
+                    <h2>{{ "{:.3f}".format(towers) }} Bar</h2>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        // Auto-refresh the page every 5 seconds
+        setInterval(function() {
+            location.reload();
+        }, 10000); // Adjust the time interval as needed (in milliseconds)
+    </script>
+</body>
+</html>
+<!-- <form method="post" action="../actions/action_add_failure_report.php">
+
+<button type="submit" class="btn" name="failure_report">Add Failure Report</button>
+
+</form> -->

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+    <div class="container">
+        <!-- Left side -->
+        <leftside>
+            <div class="top">
+                <div class="logo">
+                    <h2>DIGI2 Lab</h2>
+                </div>
+                <div class="close">
+                    <span class="material-symbols-sharp"> close </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="{{ url_for('index') }}">
+                    <span class="material-symbols-sharp">grid_view</span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a href="#">
+                    <span class="material-symbols-sharp">insights</span>
+                    <h3>Analytics</h3>
+                </a>
+                <a href="{{ url_for('add_failure_report') }}">
+                    <span class="material-symbols-sharp">add</span>
+                    <h3>Add Failure Report</h3>
+                </a>
+                <a href="{{ url_for('show_rules') }}" class="active">
+                    <span class="material-symbols-sharp">data_check</span>
+                    <h3>Show Rules</h3>
+                </a>
+                <a href="{{ url_for('open_page_add_rule') }}">
+                    <span class="material-symbols-sharp">add</span>
+                    <h3>Add New Rule</h3>
+                </a>
+                <a href="#">
+                    <span class="material-symbols-sharp">logout</span>
+                    <h3>Logout</h3>
+                </a>
+
+            </div>
+        </leftside>
+
+        <main>
+            <h1>Rules</h1>
+            <div class="rules">
+                {% for index, (condition, pred) in indexed_rules %}
+                    {% set variable = condition.split("[")[1].split("']")[0].split("_")[1:]|join(" ")|capitalize %}
+                    {% set operator = condition.split(" ")[-2] %}
+                    {% set comparison_value = condition.split(" ")[-1] %}
+                    <div class="rule">
+                        {% if pred == 0 %}
+                            <p><strong>Rule:</strong> If prediction is Not Failure and {{ variable }} {{ operator }} {{ comparison_value }}</p>
+                            <p><strong>New Prediction:</strong> Failure</p>
+                        {% elif pred == 1 %}
+                            <p><strong>Rule:</strong> If prediction is Failure and {{ variable }} {{ operator }} {{ comparison_value }}</p>
+                            <p><strong>New Prediction:</strong> Not a Failure</p>
+                        {% endif %}
+                        <form method="post" action="{{ url_for('delete_rule') }}">
+                            <input type="hidden" name="index" value="{{ index }}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        </main>
+
+
+
+
+
+
+
+    </div>
+</body>
+</html>

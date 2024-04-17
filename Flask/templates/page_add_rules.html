@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+    <div class="container">
+
+        <!-- Left side -->
+        <leftside>
+            <div class="top">
+                <div class="logo">
+                    <h2>DIGI2 Lab</h2>
+                </div>
+                <div class="close">
+                    <span class="material-symbols-sharp"> close </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="{{ url_for('index') }}">
+                    <span class="material-symbols-sharp">grid_view</span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a href="#">
+                    <span class="material-symbols-sharp">insights</span>
+                    <h3>Analytics</h3>
+                </a>
+                <a href="{{ url_for('add_failure_report') }}">
+                    <span class="material-symbols-sharp">add</span>
+                    <h3>Add Failure Report</h3>
+                </a>
+                <a href="{{ url_for('show_rules') }}">
+                    <span class="material-symbols-sharp">data_check</span>
+                    <h3>Show Rules</h3>
+                </a>
+                <a href="{{ url_for('open_page_add_rule') }}" class="active">
+                    <span class="material-symbols-sharp">add</span>
+                    <h3>Add New Rule</h3>
+                </a>
+                <a href="#">
+                    <span class="material-symbols-sharp">logout</span>
+                    <h3>Logout</h3>
+                </a>
+
+            </div>
+        </leftside>
+
+        <!-- Middle side -->
+        <main>
+            <h1>Add new rule</h1>
+
+            <div class="report">
+
+                <!-- Form 1: Dropdown menu -->
+                <form method="post" action="/submit_rules">
+                    <label for="word">If prediction is:</label>
+                    <select id="pred" name="pred">
+                        <option value="1">Failure</option>
+                        <option value="0">Not Failure</option>
+                    </select>
+
+                    <label for="word">Select a variable:</label>
+                    <select id="word" name="word">
+                        <option value="TP2">TP2</option>
+                        <option value="TP3">TP3</option>
+                        <option value="H1">H1</option>
+                        <option value="DV_pressure">DV pressure</option>
+                        <option value="Reservoirs">Reservoirs</option>
+                        <option value="median_Oil_temperature">Oil temperature</option>
+                        <option value="Motor_current">Motor current</option>
+                        <option value="COMP">COMP</option>
+                        <option value="DV_eletric">DV eletric</option>
+                        <option value="Towers">Towers</option>
+                        <option value="MPG">MPG</option>
+                        <option value="LPS">LPS</option>
+                        <option value="Pressure_switch">Pressure switch</option>
+                        <option value="Oil_level">Oil level</option>
+                        <option value="Caudal_impulses">Caudal impulses</option>
+
+                    </select>
+
+                    <label for="operator">Select an operator:</label>
+                    <select id="operator" name="operator">
+                        <option value=">">></option>
+                        <option value="<"><</option>
+                        <option value="=">=</option>
+                    </select>
+
+                    <label for="value">Enter a value:</label>
+                    <input type="text" id="value" name="value" placeholder="Enter a value">
+
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+
+        </main>
+
+    </div>
+</body>
+</html>
+<!-- <form method="post" action="../actions/action_add_failure_report.php">
+
+<button type="submit" class="btn" name="failure_report">Add Failure Report</button>
+
+</form> -->
