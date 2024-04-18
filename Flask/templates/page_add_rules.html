@@ -43,6 +43,10 @@
                     <span class="material-symbols-sharp">add</span>
                     <h3>Add New Rule</h3>
                 </a>
+                <a href="{{ url_for('open_page_xai') }}">
+                    <span class="material-symbols-sharp">display_settings</span>
+                    <h3>XAI</h3>
+                </a>
                 <a href="#">
                     <span class="material-symbols-sharp">logout</span>
                     <h3>Logout</h3>
@@ -59,7 +63,7 @@
 
                 <!-- Form 1: Dropdown menu -->
                 <form method="post" action="/submit_rules">
-                    <label for="word">If prediction is:</label>
+                    <label for="word">If model predicts:</label>
                     <select id="pred" name="pred">
                         <option value="1">Failure</option>
                         <option value="0">Not Failure</option>

@@ -6,6 +6,10 @@ import joblib
 import psycopg2
 import threading
 import datetime
+import dill
+import lime.lime_tabular
+import os
+import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 
@@ -32,6 +36,8 @@ v_timestamps = []
 
 # Define the rules list
 rules = []
+
+explanation_text = ""
 
 # Rule 1
 condition_1 = f"df['median_Oil_temperature'].iloc[-1] > 83"
@@ -88,6 +94,50 @@ data_window = deque(maxlen=900)  # Assuming 10 seconds * 900 = 15 minutes
 
 # Load your machine learning model
 model = joblib.load("C:/Users/migue/PycharmProjects/Hybrid_Approach_Metro_Dataset/Metro_Dataset/Direito/best_model__light.pkl")  # Adjust the file path as per your model location
+
+
+# Define the path to the explainer file
+explainer_file_path = 'models/explainer_lime.pkl'
+
+# Load the explainer object from the file
+with open(explainer_file_path, 'rb') as f:
+    explainer = dill.load(f)
+
+
+def save_interactive_visualization(html_path):
+    # Generate and save the interactive visualization HTML file
+    with open(html_path, 'w') as f:
+        f.write('<html><body>Interactive Visualization</body></html>')
+
+
+
+def generate_explanation(df):
+    global explanation_text
+
+    # Generate Lime explanation
+    explanation = explainer.explain_instance(df.values[0], model.predict_proba, num_features=7)
+
+    # Generate explanation text (can be customized based on your requirements)
+    explanation_text = "LIME Explanation:<br>"
+    for i in range(len(explanation.as_list())):
+        explanation_text += f"{explanation.as_list()[i][0]}: {explanation.as_list()[i][1]}<br>"
+
+    explanation_list = explanation.as_list()
+    explanation_dict = dict(explanation_list)
+
+    # Modify Y labels to remove prefix, split at underscores, and capitalize words
+    y_labels = [' '.join(word.capitalize() for word in label.split('_')[1:]) for label in explanation_dict.keys()]
+
+    # Plot the explanation with modified Y labels
+    plt.figure(figsize=(14, 12))
+    plt.barh(y_labels, explanation_dict.values())
+    plt.xlabel('Contribution', fontsize=17)
+    plt.ylabel('Feature', fontsize=17)
+    plt.title(f'Feature Contributions to Prediction (Prediction: {prediction})', fontsize=18)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.tight_layout()
+    plt.savefig('static/images/explanation_plot.png')
 
 
 # Function to perform feature engineering
@@ -188,6 +238,10 @@ def on_message(client, userdata, message):
     towers = df['median_Towers'].iloc[-1]
     prediction = int(prediction)
 
+    # Generate LIME explanation
+    generate_explanation(df)
+
+
     print(len(data_window))
     # Check if it's time to commit
     if len(data_window) % BATCH_SIZE == 0:
@@ -225,6 +279,8 @@ def on_message(client, userdata, message):
         v_towers.clear()
         v_predictions.clear()
         v_timestamps.clear()
+
+
 
 
 def mqtt_loop():
@@ -430,6 +486,10 @@ def delete_rule():
     del rules[index]
 
     return show_rules()
+
+@app.route('/open_page_xai')
+def open_page_xai():
+    return render_template('page_xai.html', explanation=explanation_text)
 
 if __name__ == '__main__':
     app.run(debug=False)

@@ -374,6 +374,13 @@ explainer = lime.lime_tabular.LimeTabularExplainer(training_data=x_train.values,
                                                    mode='classification',
                                                    feature_names=x_train.columns.tolist())
 
+import dill
+
+# Save the explainer object to a file using dill
+with open('explainer_lime.pkl', 'wb') as f:
+    dill.dump(explainer, f)
+
+
 # Select a specific instance from your test dataset for explanation
 #instance_index = 26610  # You can choose any index from your test dataset
 instance_index = 293851
