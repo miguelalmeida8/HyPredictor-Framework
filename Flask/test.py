@@ -108,6 +108,7 @@ def feature_engineering(df):
     df.drop(columns=['timestamp', 'DV_pressure', 'Oil_temperature', 'Motor_current', 'TP2', 'H1',
                 'Reservoirs', 'Towers'], inplace=True)
 
+
     return df
 
 
@@ -380,10 +381,46 @@ def open_page_add_rule():
     return render_template('page_add_rules.html')
 
 
+
 @app.route('/show_rules')
 def show_rules():
-    indexed_rules = [(index, rule) for index, rule in enumerate(rules)]
+    formatted_conditions = []
+
+    # Iterate over the rules
+    for condition, pred in rules:
+        # Split the condition by 'and' to handle multiple conditions
+        conditions = condition.split(" and ")
+
+        # Initialize a list to store the formatted conditions
+        formatted_condition_parts = []
+
+        # Iterate over each condition part
+        for cond in conditions:
+            # Extract variable, operator, and value from the condition
+            variable_parts = cond.split("['")[1].split("']")[0].split("_")
+            variable = " ".join(variable_parts[1:]).capitalize()  # Join parts except the first one and capitalize
+
+            operator = cond.split(" ")[-2]
+            value = cond.split(" ")[-1]
+
+            # Format the condition part
+            formatted_condition_part = f"{variable} {operator} {value}"
+
+            # Append the formatted condition part to the list
+            formatted_condition_parts.append(formatted_condition_part)
+
+        # Join the formatted condition parts with 'and' to reconstruct the original condition
+        formatted_condition = " and ".join(formatted_condition_parts)
+
+        # Append the formatted condition and prediction as a tuple to the new vector
+        formatted_conditions.append((formatted_condition, pred))
+
+        # Print the formatted condition
+        print(formatted_condition)
+
+    indexed_rules = [(index, rule) for index, rule in enumerate(formatted_conditions)]
     return render_template('page_show_rules.html', indexed_rules=indexed_rules)
+
 
 @app.route('/delete_rule', methods=['POST'])
 def delete_rule():
@@ -392,10 +429,7 @@ def delete_rule():
     # Delete the rule by index
     del rules[index]
 
-    indexed_rules = [(index, rule) for index, rule in enumerate(rules)]
-
-    # Redirect back to the show_rules page
-    return render_template('page_show_rules.html', indexed_rules=indexed_rules)
+    return show_rules()
 
 if __name__ == '__main__':
     app.run(debug=False)

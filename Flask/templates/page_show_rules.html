@@ -54,15 +54,12 @@
             <h1>Rules</h1>
             <div class="rules">
                 {% for index, (condition, pred) in indexed_rules %}
-                    {% set variable = condition.split("[")[1].split("']")[0].split("_")[1:]|join(" ")|capitalize %}
-                    {% set operator = condition.split(" ")[-2] %}
-                    {% set comparison_value = condition.split(" ")[-1] %}
                     <div class="rule">
                         {% if pred == 0 %}
-                            <p><strong>Rule:</strong> If prediction is Not Failure and {{ variable }} {{ operator }} {{ comparison_value }}</p>
+                            <p><strong>Rule:</strong> If model predicts Not Failure and {{ condition }}</p>
                             <p><strong>New Prediction:</strong> Failure</p>
                         {% elif pred == 1 %}
-                            <p><strong>Rule:</strong> If prediction is Failure and {{ variable }} {{ operator }} {{ comparison_value }}</p>
+                            <p><strong>Rule:</strong> If model predicts Failure and {{ condition }}</p>
                             <p><strong>New Prediction:</strong> Not a Failure</p>
                         {% endif %}
                         <form method="post" action="{{ url_for('delete_rule') }}">
