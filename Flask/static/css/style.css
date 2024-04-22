@@ -361,11 +361,36 @@ select, input[type="text"] {
 }
 
 /***************** XAI *************************/
+.XAI{
+    margin-top: 0.9rem;
+}
+
+.feature-score-table h2{
+    margin-top: 1.7rem;
+}
+
+.feature-score-table h2.failure {
+    color: red; /* Set color to red for failure prediction */
+}
+
+.feature-score-table h2.no_failure {
+    color: green; /* Set color to green for no failure prediction */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
 .model-explanation-plot {
     margin-top: 2.2rem;
-    display: flex;
-    justify-content: center; /* Horizontally center the image */
-    align-items: center; /* Vertically center the image */
 }
 .model-explanation-plot img {
     max-width: 80%;
@@ -373,17 +398,77 @@ select, input[type="text"] {
     height: auto;
     border: 1px solid #ddd;
     border-radius: 5px;
+    margin-left: 10%;
+    margin-top: 2rem;
 }
 
 .narrative-explanation{
-    margin-top: 2.2rem;
+    margin-top: 2rem;
 }
 
 .narrative-explanation p {
     margin-top: 2rem;
     color: black;
     font-weight: normal;
-    font-size: 1.2rem;
+    font-size: 1rem;
     line-height: 2.6; /* Adjust the line height for spacing between lines */
     margin-left: 10%;
 }
+
+
+
+    /* Modal Styles */
+    .modal {
+        display: none; /* Hide the modal by default */
+        position: fixed; /* Position the modal */
+        z-index: 1; /* Set the z-index to make sure it appears on top of other elements */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scrolling if needed */
+        background-color: rgba(0,0,0,0.4); /* Black background with transparency */
+    }
+
+/* Modal Content Styles */
+.modal-content {
+    background-color: #fefefe; /* White background */
+    margin: 15% auto; /* Center modal vertically and horizontally */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Set the width of the modal content */
+    max-width: 600px; /* Set maximum width for larger screens */
+    border-radius: 10px; /* Add rounded corners */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Add shadow */
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Add shadow for older browsers */
+    -moz-box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Add shadow for older browsers */
+}
+
+/* Close Button Styles */
+.close {
+    color: #aaa; /* Light gray color for the close button */
+    float: right; /* Float the button to the right */
+    font-size: 28px; /* Increase font size */
+    font-weight: bold; /* Make the button text bold */
+}
+
+.close:hover,
+.close:focus {
+    color: black; /* Change color on hover/focus */
+    text-decoration: none; /* Remove underline on hover/focus */
+    cursor: pointer; /* Change cursor to pointer on hover/focus */
+}
+
+.question-mark {
+    cursor: pointer;
+    color: blue;
+}
+
+.question-mark:hover {
+    color: darkblue;
+}
+
+.modal-content p {
+    margin-bottom: 10px; /* Add margin-bottom to create space between paragraphs */
+}
+

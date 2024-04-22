@@ -117,10 +117,10 @@ def generate_explanation(df):
     # Generate Lime explanation
     explanation = explainer.explain_instance(df.values[0], model.predict_proba, num_features=7)
 
-    # Generate explanation text (can be customized based on your requirements)
-    explanation_text = "LIME Explanation:<br>"
-    for i in range(len(explanation.as_list())):
-        explanation_text += f"{explanation.as_list()[i][0]}: {explanation.as_list()[i][1]}<br>"
+    explanation_text = ""
+    for feature, score in explanation.as_list():
+        feature = feature.replace("median_", "").replace("_"," ").title()
+        explanation_text += f"{feature}: {score}<br>"
 
     explanation_list = explanation.as_list()
     explanation_dict = dict(explanation_list)
@@ -489,7 +489,8 @@ def delete_rule():
 
 @app.route('/open_page_xai')
 def open_page_xai():
-    return render_template('page_xai.html', explanation=explanation_text)
+    explanation_list = [pair.split(': ') for pair in explanation_text.split('<br>') if pair.strip()]
+    return render_template('page_xai.html', explanation_list=explanation_list, narrative_explanation=explanation_text, prediction = prediction)
 
 if __name__ == '__main__':
     app.run(debug=False)

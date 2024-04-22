@@ -74,18 +74,52 @@
 
         <!-- Interactive Visualization -->
         <main>
-             <h1>Model Explanation</h1>
+            <h1 class="XAI">Model Explanation</h1>
+
+              <!-- Table for Feature-Score Pairs -->
+            <div class="feature-score-table">
+                <h2 class="{% if prediction == 1 %}failure{% else %}no_failure{% endif %}">Prediction: {% if prediction == 0 %}No Failure{% else %}Failure{% endif %}</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Score <span class="question-mark">(?)</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feature, score in explanation_list %}
+                            <tr>
+                                <td>{{ feature }}</td>
+                                <td>{{ score }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
             <!-- Feature Importance Plot -->
             <div class="model-explanation-plot">
+                <h2>Model Explanation Plot</h2>
                 <img src="{{ url_for('static', filename='images/explanation_plot.png') }}" alt="Explanation Plot">
             </div>
 
             <!-- Narrative Explanation -->
             <div class="narrative-explanation">
                 <h2>Narrative Explanation</h2>
-                <p>{{ explanation | safe }}</p>
+                <p>{{ narrative_explanation  | safe }}</p>
             </div>
+
         </main>
+
+       <!-- Pop-up modal -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>"Score" refers to the importance or contribution of each feature to the model's prediction.</p>
+                <p></p>
+                <p>For example, a positive score for a feature indicates that higher values of that feature are associated with a higher likelihood of machine failure, while a negative score indicates the opposite (no failure).</p>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -94,10 +128,51 @@
             location.reload();
         }, 10000); // Adjust the time interval as needed (in milliseconds)
     </script>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById("modal");
+
+        // Get the question mark elements
+        var questionMarks = document.querySelectorAll(".question-mark");
+
+        // Get the close button element
+        var closeBtn = document.querySelector(".modal-content .close");
+
+        // When the question mark is clicked, display the modal
+        questionMarks.forEach(function(mark) {
+            mark.addEventListener("click", function() {
+                modal.style.display = "block";
+                // Store the state of the modal in sessionStorage
+                sessionStorage.setItem("modalDisplayed", "true");
+            });
+        });
+
+        // When the user clicks on the close button, close the modal
+        closeBtn.addEventListener("click", function() {
+            modal.style.display = "none";
+            // Remove the state of the modal from sessionStorage
+            sessionStorage.removeItem("modalDisplayed");
+        });
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.addEventListener("click", function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                // Remove the state of the modal from sessionStorage
+                sessionStorage.removeItem("modalDisplayed");
+            }
+        });
+
+        // Check if the modal was displayed before refreshing the page
+        window.addEventListener("load", function() {
+            var modalDisplayed = sessionStorage.getItem("modalDisplayed");
+            if (modalDisplayed === "true") {
+                modal.style.display = "block";
+            }
+        });
+
+    </script>
+
 </body>
 </html>
-<!-- <form method="post" action="../actions/action_add_failure_report.php">
-
-<button type="submit" class="btn" name="failure_report">Add Failure Report</button>
-
-</form> -->
