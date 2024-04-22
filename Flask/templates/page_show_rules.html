@@ -68,7 +68,7 @@
                         {% endif %}
                         <form method="post" action="{{ url_for('delete_rule') }}">
                             <input type="hidden" name="index" value="{{ index }}">
-                            <button type="submit">Delete</button>
+                            <button class="button_rules" type="submit">Delete</button>
                         </form>
                     </div>
                 {% endfor %}
