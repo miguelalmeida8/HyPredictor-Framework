@@ -117,10 +117,10 @@ def generate_explanation(df):
     # Generate Lime explanation
     explanation = explainer.explain_instance(df.values[0], model.predict_proba, num_features=7)
 
-    # Generate explanation text (can be customized based on your requirements)
-    explanation_text = "LIME Explanation:<br>"
-    for i in range(len(explanation.as_list())):
-        explanation_text += f"{explanation.as_list()[i][0]}: {explanation.as_list()[i][1]}<br>"
+    explanation_text = ""
+    for feature, score in explanation.as_list():
+        feature = feature.replace("median_", "").replace("_"," ").title()
+        explanation_text += f"{feature}: {score}<br>"
 
     explanation_list = explanation.as_list()
     explanation_dict = dict(explanation_list)
@@ -417,6 +417,29 @@ def submit_rules():
     return render_template('page_add_rules.html')
 
 
+@app.route('/submit_rules_2', methods=['POST'])
+def submit_rules_2():
+    global rules
+    # Get user-defined rules from the form
+    variable = request.form['word']
+    operator = request.form['operator']
+    value = float(request.form['value'])
+    variable_2 = request.form['word_2']
+    operator_2 = request.form['operator_2']
+    value_2 = float(request.form['value_2'])
+    pred = int(request.form['pred'])
+
+    # Construct the condition based on user input
+    condition = f"df['{variable}'].iloc[-1] {operator} {value} and df['{variable_2}'].iloc[-1] {operator_2} {value_2}"
+
+    # Append the condition and prediction as a tuple to the rules list
+    rules.append((condition, pred))
+    print(condition)
+    print(pred)
+
+    return render_template('page_add_rules.html')
+
+
 def apply_rules(df):
     global prediction, rules
 
@@ -435,6 +458,11 @@ def apply_rules(df):
 def open_page_add_rule():
 
     return render_template('page_add_rules.html')
+
+@app.route('/open_page_add_rule_2', methods=['GET', 'POST'])
+def open_page_add_rule_2():
+    print("ola")
+    return render_template('page_add_rules_2.html')
 
 
 
@@ -489,7 +517,8 @@ def delete_rule():
 
 @app.route('/open_page_xai')
 def open_page_xai():
-    return render_template('page_xai.html', explanation=explanation_text)
+    explanation_list = [pair.split(': ') for pair in explanation_text.split('<br>') if pair.strip()]
+    return render_template('page_xai.html', explanation_list=explanation_list, narrative_explanation=explanation_text, prediction = prediction)
 
 if __name__ == '__main__':
     app.run(debug=False)

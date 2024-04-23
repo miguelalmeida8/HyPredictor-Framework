@@ -62,15 +62,13 @@
             <div class="report">
 
                 <!-- Form 1: Dropdown menu -->
-                <form method="post" action="/submit_rules">
+                <form method="post" action="/submit_rules_2">
                     <label for="word">If model predicts:</label>
                     <select id="pred" name="pred">
                         <option value="1">Failure</option>
                         <option value="0">Not Failure</option>
                     </select>
-                    <h2>Condition:</h2>
-                    <hr>
-                    <hr>
+
                     <label for="word">Select a variable:</label>
                     <select id="word" name="word">
                         <option value="median_TP2">TP2</option>
@@ -101,11 +99,38 @@
                     <label for="value">Enter a value:</label>
                     <input type="text" id="value" name="value" placeholder="Enter a value">
 
-                    <button type="submit">Submit</button>
 
-                </form>
-                <form method="post" action="/open_page_add_rule_2">
-                    <button type="submit">Add more conditions</button>
+                    <label for="word_2">Select a variable:</label>
+                    <select id="word_2" name="word_2">
+                        <option value="median_TP2">TP2</option>
+                        <option value="TP3">TP3</option>
+                        <option value="median_h1">H1</option>
+                        <option value="median_DV_pressure">DV pressure</option>
+                        <option value="median_Reservoirs">Reservoirs</option>
+                        <option value="median_Oil_temperature">Oil temperature</option>
+                        <option value="median_Motor_current">Motor current</option>
+                        <option value="COMP">COMP</option>
+                        <option value="DV_eletric">DV eletric</option>
+                        <option value="median_Towers">Towers</option>
+                        <option value="MPG">MPG</option>
+                        <option value="LPS">LPS</option>
+                        <option value="Pressure_switch">Pressure switch</option>
+                        <option value="Oil_level">Oil level</option>
+                        <option value="Caudal_impulses">Caudal impulses</option>
+
+                    </select>
+
+                    <label for="operator_2">Select an operator:</label>
+                    <select id="operator_2" name="operator_2">
+                        <option value=">">></option>
+                        <option value="<"><</option>
+                        <option value="=">=</option>
+                    </select>
+
+                    <label for="value_2">Enter a value:</label>
+                    <input type="text" id="value_2" name="value_2" placeholder="Enter a value">
+
+                    <button type="submit">Submit</button>
                 </form>
             </div>
 
