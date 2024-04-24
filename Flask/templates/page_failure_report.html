@@ -31,7 +31,11 @@
                     <span class="material-symbols-sharp">insights</span>
                     <h3>Analytics</h3>
                 </a>
-                <a href="{{ url_for('add_failure_report') }}" class="active">
+                <a href="{{ url_for('failure_report') }}" class="active">
+                    <span class="material-symbols-sharp">lab_profile</span>
+                    <h3>Failure Report</h3>
+                </a>
+                <a href="{{ url_for('add_failure_report') }}" >
                     <span class="material-symbols-sharp">add</span>
                     <h3>Add Failure Report</h3>
                 </a>
@@ -58,28 +62,34 @@
         <!-- Middle side -->
         <main>
             <h1>Failure Report</h1>
-
-            <div class="report">
-
-                <form method="post" class="failure_report"  action="/submit_form">
-                    <label for="start_date">Start Date:</label>
-                    <input type="datetime-local" id="start_date" name="start_date">
-
-                    <label for="end_date">End Date:</label>
-                    <input type="datetime-local" id="end_date" name="end_date">
-
-                    <label for="type_of_failure">Type of failure:</label>
-                    <input type="text" id="type_of_failure" name="type_of_failure">
-
-                    <label for="severity">Severity:</label>
-                    <input type="text" id="severity" name="severity">
-
-                    <button name="add_failure_report_button" type="submit">Submit</button>
-                </form>
-
-            </div>
-
+            {% if failure_reports %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Number</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Failure</th>
+                            <th>Severity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for report in failure_reports %}
+                            <tr>
+                                <td>{{ report[0] }}</td>  <!-- Accessing the first element of the tuple -->
+                                <td>{{ report[1] }}</td>  <!-- Accessing the second element of the tuple -->
+                                <td>{{ report[2] }}</td>  <!-- Accessing the third element of the tuple -->
+                                <td>{{ report[3] }}</td>  <!-- Accessing the fourth element of the tuple -->
+                                <td>{{ report[4] }}</td>  <!-- Accessing the fifth element of the tuple -->
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No failure reports yet.</p>
+            {% endif %}
         </main>
+
 
     </div>
 </body>

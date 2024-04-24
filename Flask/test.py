@@ -83,6 +83,7 @@ insert_query = """
 INSERT INTO {}.test_data (dv_pressure, oil_temperature, motor_current, tp2, h1, reservoirs, towers, failure, timestamp)
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
 """.format(schema_name)
+
 ###################
 
 # Define the MQTT broker's address and port
@@ -320,7 +321,7 @@ def index():
 @app.route('/add_failure_report')
 def add_failure_report():
     # Logic for the Add Failure Report page
-    return render_template('page_failure_report.html')
+    return render_template('page_add_failure_report.html')
 
 
 @app.route('/submit_form', methods=['POST'])
@@ -393,7 +394,7 @@ def submit_form():
 
 
             # Redirect to a success page or render a success message
-            return render_template('page_failure_report.html')
+            return render_template('page_add_failure_report.html')
 
         except Exception as e:
             # Rollback transaction on error
@@ -544,6 +545,33 @@ def open_page_xai():
     explanation_list = [pair.split(': ') for pair in explanation_text.split('<br>') if pair.strip()]
 
     return render_template('page_xai.html', explanation_list=explanation_list, narrative_explanation=explanation_text, prediction = prediction, prediction_probabilities = prediction_probabilities)
+
+
+@app.route('/open_failure_report')
+def failure_report():
+    conn = psycopg2.connect(
+        dbname='sie2363',
+        user='sie2363',
+        password='Ola_gato_2023',
+        host='db.fe.up.pt',
+        port='5432'
+    )
+    # Create a cursor object to execute SQL queries
+    cur = conn.cursor()
+
+    select_failure_report_query = "SELECT * FROM {}.failure_report;".format(schema_name)
+    cur.execute(select_failure_report_query)
+    cur.execute(select_failure_report_query)
+    failure_reports = cur.fetchall()
+    print(failure_reports)
+
+    conn.close()
+    cur.close()
+
+
+    return render_template('page_failure_report.html', failure_reports=failure_reports)
+
+
 
 if __name__ == '__main__':
     app.run(debug=False)
