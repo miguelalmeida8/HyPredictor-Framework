@@ -56,9 +56,9 @@
 
         <main>
             <h1>Rules</h1>
-            <div class="rules">
+            <div class="rules" id="sortable">
                 {% for index, (condition, pred) in indexed_rules %}
-                    <div class="rule">
+                    <div class="rule" id="rule_{{ index }}">
                         {% if pred == 0 %}
                             <p><strong>Rule:</strong> If model predicts Not Failure and {{ condition }}</p>
                             <p><strong>New Prediction:</strong> Failure</p>
@@ -75,6 +75,33 @@
             </div>
         </main>
 
+        <!-- Add the form for updating rule order -->
+        <form id="update_rule_order" method="post" action="{{ url_for('update_rule_order') }}">
+            <input type="hidden" name="rule-order" id="rule-order">
+        </form>
+
     </div>
 </body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+<script>
+    $( function() {
+        $( "#sortable" ).sortable({
+            update: function( event, ui ) {
+                // Get the new order of the rules
+                var newOrder = $(this).sortable('toArray');
+
+                // Update the value of the hidden input field with the new order
+                $('#rule-order').val(JSON.stringify(newOrder));
+
+                // Submit the other form
+                $('#update_rule_order').submit();
+            }
+        });
+        $( "#sortable" ).disableSelection();
+    });
+</script>
+
 </html>

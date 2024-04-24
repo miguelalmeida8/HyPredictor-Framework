@@ -391,17 +391,23 @@ prediction = best_model.predict_proba(instance.reshape(1, -1))[0]
 
 # Explain the prediction using LIME
 explanation = explainer.explain_instance(instance, best_model.predict_proba, num_features=len(x_train.columns))
-
+'''
 # Visualize the explanation
 explanation.show_in_notebook()
 
 # Save the explanation to an HTML file
-#explanation.save_to_file('explanation.templates')
+explanation.save_to_file('explanation.html')
 
 # Open the HTML file in a web browser
-#import webbrowser
-#webbrowser.open('explanation.templates')
+import webbrowser
+webbrowser.open('explanation.html')
 
+# Assume explanation is the LIME explanation object
+prediction_probabilities = explanation.predict_proba
+
+# Print the prediction probabilities
+print("Prediction Probabilities:", prediction_probabilities)
+'''
 
 
 # Get the explanation in a format that can be plotted
@@ -515,8 +521,10 @@ plt.ylabel("True labels")
 plt.title("Confusion Matrix")
 plt.show()
 
+
 '''
 if test_recall > 0 and test_precision > 0:
     print("\nSalvou o Modelo")
     joblib.dump(best_model, 'best_model__light.pkl')
     '''
+

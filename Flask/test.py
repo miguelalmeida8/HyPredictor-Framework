@@ -7,9 +7,11 @@ import psycopg2
 import threading
 import datetime
 import dill
+import numpy as np
 import lime.lime_tabular
 import os
 import matplotlib.pyplot as plt
+import json
 
 app = Flask(__name__)
 
@@ -23,6 +25,7 @@ h1 = 0.00
 reservoirs = 0.00
 towers = 0.00
 nr = 21
+prediction_probabilities = 0
 
 v_oil_temperature = []
 v_dv_pressure = []
@@ -112,7 +115,7 @@ def save_interactive_visualization(html_path):
 
 
 def generate_explanation(df):
-    global explanation_text
+    global explanation_text, prediction_probabilities
 
     # Generate Lime explanation
     explanation = explainer.explain_instance(df.values[0], model.predict_proba, num_features=7)
@@ -139,6 +142,10 @@ def generate_explanation(df):
     plt.tight_layout()
     plt.savefig('static/images/explanation_plot.png')
 
+    # Assume explanation is the LIME explanation object
+    prediction_probabilities = explanation.predict_proba
+    max_index = np.argmax(prediction_probabilities)
+    prediction_probabilities = prediction_probabilities[max_index] * 100
 
 # Function to perform feature engineering
 def feature_engineering(df):
@@ -217,6 +224,7 @@ def on_message(client, userdata, message):
 
     apply_rules(df)
 
+
     ################################################
 
     v_oil_temperature.append(df['median_Oil_temperature'].iloc[-1])
@@ -240,7 +248,6 @@ def on_message(client, userdata, message):
 
     # Generate LIME explanation
     generate_explanation(df)
-
 
     print(len(data_window))
     # Check if it's time to commit
@@ -380,8 +387,6 @@ def submit_form():
             # Prepare features and target variable
             X = df.drop(columns=['failure'])  # Features
             y = df['failure']  # Target variable
-            #print(X)
-            #print(y)
 
             # Retrain the model
             model.fit(X, y)
@@ -468,6 +473,8 @@ def open_page_add_rule_2():
 
 @app.route('/show_rules')
 def show_rules():
+    global rules
+
     formatted_conditions = []
 
     # Iterate over the rules
@@ -508,6 +515,7 @@ def show_rules():
 
 @app.route('/delete_rule', methods=['POST'])
 def delete_rule():
+    global rules
     index = int(request.form['index'])
 
     # Delete the rule by index
@@ -515,10 +523,27 @@ def delete_rule():
 
     return show_rules()
 
+
+
+@app.route('/update_rule_order', methods=['POST'])
+def update_rule_order():
+
+    global rules
+
+    new_order = request.form.get('rule-order')  # Get the new order from the form
+    new_order = json.loads(new_order)
+
+    new_order = [int(index.split('_')[1]) for index in new_order]
+    new_order = [int(index) for index in new_order]
+    rules = [rules[index] for index in new_order]
+
+    return show_rules()
+
 @app.route('/open_page_xai')
 def open_page_xai():
     explanation_list = [pair.split(': ') for pair in explanation_text.split('<br>') if pair.strip()]
-    return render_template('page_xai.html', explanation_list=explanation_list, narrative_explanation=explanation_text, prediction = prediction)
+
+    return render_template('page_xai.html', explanation_list=explanation_list, narrative_explanation=explanation_text, prediction = prediction, prediction_probabilities = prediction_probabilities)
 
 if __name__ == '__main__':
     app.run(debug=False)
