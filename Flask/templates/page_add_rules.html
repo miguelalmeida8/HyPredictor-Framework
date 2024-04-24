@@ -45,7 +45,7 @@
                 </a>
                 <a href="{{ url_for('open_page_xai') }}">
                     <span class="material-symbols-sharp">display_settings</span>
-                    <h3>XAI</h3>
+                    <h3>Model Explanation</h3>
                 </a>
                 <a href="#">
                     <span class="material-symbols-sharp">logout</span>
@@ -62,15 +62,17 @@
             <div class="report">
 
                 <!-- Form 1: Dropdown menu -->
-                <form method="post" action="/submit_rules">
+                <form method="post" class="first_button" action="/submit_rules">
                     <label for="word">If model predicts:</label>
                     <select id="pred" name="pred">
                         <option value="1">Failure</option>
                         <option value="0">Not Failure</option>
                     </select>
+
+                    <div style="margin-bottom: 15px;"></div>
                     <h2>Condition:</h2>
-                    <hr>
-                    <hr>
+                    <div style="margin-bottom: 10px;"></div>
+
                     <label for="word">Select a variable:</label>
                     <select id="word" name="word">
                         <option value="median_TP2">TP2</option>
@@ -104,8 +106,8 @@
                     <button type="submit">Submit</button>
 
                 </form>
-                <form method="post" action="/open_page_add_rule_2">
-                    <button type="submit">Add more conditions</button>
+                <form method="post" class="second-button"  action="/open_page_add_rule_2">
+                    <button type="submit" class="second-button">Add more conditions</button>
                 </form>
             </div>
 

@@ -45,7 +45,7 @@
                 </a>
                 <a href="{{ url_for('open_page_xai') }}">
                     <span class="material-symbols-sharp">display_settings</span>
-                    <h3>XAI</h3>
+                    <h3>Model Explanation</h3>
                 </a>
                 <a href="#">
                     <span class="material-symbols-sharp">logout</span>
@@ -61,7 +61,7 @@
 
             <div class="report">
 
-                <form method="post" action="/submit_form">
+                <form method="post" class="failure_report"  action="/submit_form">
                     <label for="start_date">Start Date:</label>
                     <input type="datetime-local" id="start_date" name="start_date">
 
@@ -84,8 +84,3 @@
     </div>
 </body>
 </html>
-<!-- <form method="post" action="../actions/action_add_failure_report.php">
-
-<button type="submit" class="btn" name="failure_report">Add Failure Report</button>
-
-</form> -->

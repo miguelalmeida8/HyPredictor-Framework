@@ -236,7 +236,7 @@ main .dashboards>div:hover{
     text-align: center;
     margin-top: 5rem;
     font-size: 2rem;
-    color: green;
+    color: gray;
 }
 
 .dashboards > div h2.failure {
@@ -251,7 +251,7 @@ main .dashboards>div:hover{
 
 /***************** Failure Report *************************/
 
-.report form {
+.failure_report {
     max-width: 800px;
     margin: 0 auto;
     padding: 34px;
@@ -260,6 +260,36 @@ main .dashboards>div:hover{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-top: 3rem;
   }
+
+.add_rules_2 {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 34px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 3rem;
+  }
+
+.first_button {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 34px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 3rem;
+  }
+
+.second-button {
+    margin-top: 1rem;
+    margin-left: auto; /* Set left margin to auto */
+    margin-right: auto; /* Set right margin to auto */
+    display: block; /* Ensure button is block-level element */
+    text-align: center; /* Center the text within the button */
+    margin-bottom: 1rem;
+}
+
 
   label {
     display: block;
@@ -416,19 +446,18 @@ th, td {
 }
 
 
-
-    /* Modal Styles */
-    .modal {
-        display: none; /* Hide the modal by default */
-        position: fixed; /* Position the modal */
-        z-index: 1; /* Set the z-index to make sure it appears on top of other elements */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scrolling if needed */
-        background-color: rgba(0,0,0,0.4); /* Black background with transparency */
-    }
+/* Modal Styles */
+.modal {
+    display: none; /* Hide the modal by default */
+    position: fixed; /* Position the modal */
+    z-index: 1; /* Set the z-index to make sure it appears on top of other elements */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scrolling if needed */
+    background-color: rgba(0,0,0,0.4); /* Black background with transparency */
+}
 
 /* Modal Content Styles */
 .modal-content {
