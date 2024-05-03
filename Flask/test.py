@@ -8,8 +8,6 @@ import threading
 import datetime
 import dill
 import numpy as np
-import lime.lime_tabular
-import os
 import matplotlib.pyplot as plt
 import json
 
@@ -59,7 +57,7 @@ rules.append((condition_3, pred_3))
 
 
 
-# base de dados
+########## Database ####################
 conn = psycopg2.connect(
     dbname='sie2363',
     user='sie2363',
@@ -84,35 +82,29 @@ INSERT INTO {}.test_data (dv_pressure, oil_temperature, motor_current, tp2, h1, 
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
 """.format(schema_name)
 
-###################
+######### MQTT #############
 
 # Define the MQTT broker's address and port
-broker_address = "localhost"  # replace this with your broker's address
-broker_port = 1883  # default port for MQTT
+broker_address = "localhost"
+broker_port = 1883
 
-# Define the topic you want to subscribe to
+# Topic to subscribe
 topic = "data"
+
+#############################
 
 # Data structure to store received data with timestamps
 data_window = deque(maxlen=900)  # Assuming 10 seconds * 900 = 15 minutes
 
-# Load your machine learning model
-model = joblib.load("C:/Users/migue/PycharmProjects/Hybrid_Approach_Metro_Dataset/Metro_Dataset/Direito/best_model__light.pkl")  # Adjust the file path as per your model location
+# Load machine learning model
+model = joblib.load('models/best_model__light.pkl')
 
-
-# Define the path to the explainer file
+# Lime explainer file
 explainer_file_path = 'models/explainer_lime.pkl'
 
 # Load the explainer object from the file
 with open(explainer_file_path, 'rb') as f:
     explainer = dill.load(f)
-
-
-def save_interactive_visualization(html_path):
-    # Generate and save the interactive visualization HTML file
-    with open(html_path, 'w') as f:
-        f.write('<html><body>Interactive Visualization</body></html>')
-
 
 
 def generate_explanation(df):
@@ -148,6 +140,7 @@ def generate_explanation(df):
     max_index = np.argmax(prediction_probabilities)
     prediction_probabilities = prediction_probabilities[max_index] * 100
 
+
 # Function to perform feature engineering
 def feature_engineering(df):
     df.drop(columns=['Unnamed: 0', 'LPS', 'Pressure_switch', 'Oil_level', 'Caudal_impulses',
@@ -166,15 +159,16 @@ def feature_engineering(df):
     df.drop(columns=['timestamp', 'DV_pressure', 'Oil_temperature', 'Motor_current', 'TP2', 'H1',
                 'Reservoirs', 'Towers'], inplace=True)
 
-
     return df
 
 
 def on_message(client, userdata, message):
-    BATCH_SIZE = 10
+    Batch_size = 10
     global data_window
     global v_oil_temperature, v_dv_pressure, v_motor_current, v_tp2, v_h1, v_reservoirs, v_towers, v_predictions, v_timestamps
     global prediction, timestamps, oil_temperature, dv_pressure, motor_current, tp2, h1, reservoirs, towers
+
+    # Message received
     payload = message.payload.decode()
     print("Received MQTT message:", payload)
 
@@ -209,24 +203,13 @@ def on_message(client, userdata, message):
     # Perform feature engineering
     df = feature_engineering(df)
 
-    # Call your prediction function with the pre-processed data
-    prediction = model.predict(df)[0]  # Make prediction using loaded model
+    # Prediction with the pre-processed data using loaded model
+    prediction = model.predict(df)[0]
 
-    ####################RULES#######################
-
-    '''
-    # Print each rule in the rules list
-    for i, (condition, pred) in enumerate(rules, 1):
-        print(f"Rule {i}:")
-        print(f"Condition: {condition}")
-        print(f"Prediction: {pred}")
-        print()
-    '''
-
+    # Apply Rules
     apply_rules(df)
 
-
-    ################################################
+    # Save values for median
 
     v_oil_temperature.append(df['median_Oil_temperature'].iloc[-1])
     v_dv_pressure.append(df['median_DV_pressure'].iloc[-1])
@@ -238,6 +221,7 @@ def on_message(client, userdata, message):
     v_predictions.append(int(prediction))
     v_timestamps.append(timestamp)
 
+    # save values to show in the interface
     oil_temperature = df['median_Oil_temperature'].iloc[-1]
     dv_pressure = df['median_DV_pressure'].iloc[-1]
     motor_current = df['median_Motor_current'].iloc[-1]
@@ -251,8 +235,9 @@ def on_message(client, userdata, message):
     generate_explanation(df)
 
     print(len(data_window))
+
     # Check if it's time to commit
-    if len(data_window) % BATCH_SIZE == 0:
+    if len(data_window) % Batch_size == 0:
         # Reopen the connection
         conn = psycopg2.connect(
             dbname='sie2363',
@@ -265,7 +250,7 @@ def on_message(client, userdata, message):
         cur = conn.cursor()
 
         # Insert data into the database
-        for i in range(BATCH_SIZE):
+        for i in range(Batch_size):
             cur.execute(insert_query, (
             v_dv_pressure[i], v_oil_temperature[i],v_motor_current[i], v_tp2[i], v_h1[i], v_reservoirs[i], v_towers[i],
             v_predictions[i], v_timestamps[i]))
@@ -320,7 +305,6 @@ def index():
 
 @app.route('/add_failure_report')
 def add_failure_report():
-    # Logic for the Add Failure Report page
     return render_template('page_add_failure_report.html')
 
 
@@ -337,6 +321,7 @@ def submit_form():
                 port='5432'
             )
             cur = conn.cursor()
+
             # Parse form data
             start_date = datetime.datetime.strptime(request.form['start_date'], '%Y-%m-%dT%H:%M')
             end_date = datetime.datetime.strptime(request.form['end_date'], '%Y-%m-%dT%H:%M')
@@ -406,6 +391,7 @@ def submit_form():
 @app.route('/submit_rules', methods=['POST'])
 def submit_rules():
     global rules
+
     # Get user-defined rules from the form
     variable = request.form['word']
     operator = request.form['operator']
@@ -417,8 +403,6 @@ def submit_rules():
 
     # Append the condition and prediction as a tuple to the rules list
     rules.append((condition, pred))
-    print(condition)
-    print(pred)
 
     return render_template('page_add_rules.html')
 
@@ -440,8 +424,6 @@ def submit_rules_2():
 
     # Append the condition and prediction as a tuple to the rules list
     rules.append((condition, pred))
-    print(condition)
-    print(pred)
 
     return render_template('page_add_rules.html')
 
@@ -457,7 +439,7 @@ def apply_rules(df):
                 prediction = 1
             else:
                 prediction = 0
-            break  # Exit loop after first rule match (assuming rules are ordered by priority)
+            break  # Exit loop after first rule match (rules are ordered by priority)
 
 
 @app.route('/open_page_add_rule')
@@ -467,7 +449,7 @@ def open_page_add_rule():
 
 @app.route('/open_page_add_rule_2', methods=['GET', 'POST'])
 def open_page_add_rule_2():
-    print("ola")
+
     return render_template('page_add_rules_2.html')
 
 
@@ -517,6 +499,7 @@ def show_rules():
 @app.route('/delete_rule', methods=['POST'])
 def delete_rule():
     global rules
+
     index = int(request.form['index'])
 
     # Delete the rule by index
@@ -525,13 +508,13 @@ def delete_rule():
     return show_rules()
 
 
-
 @app.route('/update_rule_order', methods=['POST'])
 def update_rule_order():
 
     global rules
 
-    new_order = request.form.get('rule-order')  # Get the new order from the form
+    # Get the new order from the form
+    new_order = request.form.get('rule-order')
     new_order = json.loads(new_order)
 
     new_order = [int(index.split('_')[1]) for index in new_order]
@@ -544,7 +527,7 @@ def update_rule_order():
 def open_page_xai():
     explanation_list = [pair.split(': ') for pair in explanation_text.split('<br>') if pair.strip()]
 
-    return render_template('page_xai.html', explanation_list=explanation_list, narrative_explanation=explanation_text, prediction = prediction, prediction_probabilities = prediction_probabilities)
+    return render_template('page_xai.html', explanation_list=explanation_list, prediction = prediction, prediction_probabilities = prediction_probabilities)
 
 
 @app.route('/open_failure_report')
@@ -556,7 +539,7 @@ def failure_report():
         host='db.fe.up.pt',
         port='5432'
     )
-    # Create a cursor object to execute SQL queries
+
     cur = conn.cursor()
 
     select_failure_report_query = "SELECT * FROM {}.failure_report;".format(schema_name)
