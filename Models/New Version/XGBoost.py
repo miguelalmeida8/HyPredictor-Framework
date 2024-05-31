@@ -13,6 +13,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import make_scorer, recall_score
 import joblib
+from xgboost import XGBClassifier
 import lightgbm as lgb
 from catboost import CatBoostClassifier
 import xgboost as xgb
@@ -67,6 +68,7 @@ for index, row in failure_report.iterrows():
     mask = (data['timestamp'] >= start_time) & (data['timestamp'] <= end_time)
     # Update the "failure" column to 1 for matching rows
     data.loc[mask, 'failure'] = 1
+
 
 ################################  Feature Enginnering #####################################
 #Interval
@@ -268,14 +270,27 @@ y_test = test_data['failure']  # Target variable for test set
 
 scoring = make_scorer(recall_score)
 
-
+print(x_train.columns)
+'''
 param_grid = {
-    'n_estimators': [500],
-    'max_depth': [40],
+    'learning_rate': [0.1],
+    'n_estimators': [100],
+    'max_depth': [1],
+    'min_child_samples': [1],
+    'reg_lambda': [0.1]
 }
 
-# Create LightGBM Classifier
-model = RandomForestClassifier(class_weight='balanced')
+'''
+param_grid = {
+    'learning_rate': [0.01,  0.1],
+    'n_estimators': [80, 100, 160, 200, 300],
+    'max_depth': [1, 3, 5, None],
+    #'min_child_weight': [1, 2, 3],
+    'reg_lambda': [0.1, 0.01,],
+}
+
+# Create XGBoost Classifier
+model = XGBClassifier()
 
 # Create Grid Search
 grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring=scoring, verbose=5)
@@ -359,6 +374,13 @@ import lime.lime_tabular
 explainer = lime.lime_tabular.LimeTabularExplainer(training_data=x_train.values,
                                                    mode='classification',
                                                    feature_names=x_train.columns.tolist())
+'''
+import dill
+
+# Save the explainer object to a file using dill
+with open('explainer_lime.pkl', 'wb') as f:
+    dill.dump(explainer, f)
+
 
 # Select a specific instance from your test dataset for explanation
 #instance_index = 26610  # You can choose any index from your test dataset
@@ -375,11 +397,17 @@ explanation = explainer.explain_instance(instance, best_model.predict_proba, num
 explanation.show_in_notebook()
 
 # Save the explanation to an HTML file
-#explanation.save_to_file('explanation.templates')
+explanation.save_to_file('explanation.html')
 
 # Open the HTML file in a web browser
-#import webbrowser
-#webbrowser.open('explanation.templates')
+import webbrowser
+webbrowser.open('explanation.html')
+
+# Assume explanation is the LIME explanation object
+prediction_probabilities = explanation.predict_proba
+
+# Print the prediction probabilities
+print("Prediction Probabilities:", prediction_probabilities)
 
 
 
@@ -409,7 +437,7 @@ print("Rules applied by LIME:")
 for feature, weight in explanation_list:
     print(f"Feature: {feature}, Weight: {weight}")
 
-
+'''
 
 #################    RULES    ###########################333
 
@@ -428,7 +456,6 @@ for n in range(len(test_predictions_with_rules)):
 
 print(count)
 print(certa)
-
 
 count=0
 certa=0
@@ -494,3 +521,11 @@ plt.xlabel("Predicted labels")
 plt.ylabel("True labels")
 plt.title("Confusion Matrix")
 plt.show()
+
+
+
+if test_recall > 0 and test_precision > 0:
+    print("\nSalvou o Modelo")
+    joblib.dump(best_model, 'best_model__XGBoost.pkl')
+
+

@@ -161,8 +161,12 @@ def feature_engineering(df):
 
     return df
 
+import time
+execution_times = []
 
 def on_message(client, userdata, message):
+    start_time = time.time()
+
     Batch_size = 10
     global data_window
     global v_oil_temperature, v_dv_pressure, v_motor_current, v_tp2, v_h1, v_reservoirs, v_towers, v_predictions, v_timestamps
@@ -231,8 +235,11 @@ def on_message(client, userdata, message):
     towers = df['median_Towers'].iloc[-1]
     prediction = int(prediction)
 
+
     # Generate LIME explanation
     generate_explanation(df)
+
+
 
     print(len(data_window))
 
@@ -272,6 +279,14 @@ def on_message(client, userdata, message):
         v_towers.clear()
         v_predictions.clear()
         v_timestamps.clear()
+
+    end_time = time.time()
+    execution_time = end_time - start_time
+    execution_times.append(execution_time)
+    average_time = sum(execution_times) / len(execution_times)
+
+    print(f"Time taken for this execution: {execution_time:.4f} seconds")
+    print(f"Average time over {len(execution_times)} executions: {average_time:.4f} seconds")
 
 
 

@@ -13,6 +13,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import make_scorer, recall_score
 import joblib
+from xgboost import XGBClassifier
 import lightgbm as lgb
 from catboost import CatBoostClassifier
 import xgboost as xgb
@@ -270,7 +271,7 @@ y_test = test_data['failure']  # Target variable for test set
 scoring = make_scorer(recall_score)
 
 print(x_train.columns)
-
+'''
 param_grid = {
     'learning_rate': [0.1],
     'n_estimators': [100],
@@ -280,16 +281,16 @@ param_grid = {
 }
 
 '''
+# Define the parameter grid for CatBoost
 param_grid = {
-    'learning_rate': [0.01, 0.012, 0.008],
-    'n_estimators': [70, 100, 130, 160, 200],
-    'max_depth': [1],
-    'min_child_samples': [1],
-    'reg_lambda': [0.1, 0.01, 0.12, 0.14, 0.008],
+    'learning_rate': [0.01, 0.1],
+    'n_estimators': [200, 300],
+    'depth': [4],
+    #'l2_leaf_reg': [0.1, 0.01, 1, 3, 5],
 }
-'''
-# Create LightGBM Classifier
-model = lgb.LGBMClassifier(verbose=0)
+
+# Create CatBoost Classifier
+model = CatBoostClassifier(verbose=0)
 
 # Create Grid Search
 grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring=scoring, verbose=5)
@@ -373,7 +374,7 @@ import lime.lime_tabular
 explainer = lime.lime_tabular.LimeTabularExplainer(training_data=x_train.values,
                                                    mode='classification',
                                                    feature_names=x_train.columns.tolist())
-
+'''
 import dill
 
 # Save the explainer object to a file using dill
@@ -391,7 +392,7 @@ prediction = best_model.predict_proba(instance.reshape(1, -1))[0]
 
 # Explain the prediction using LIME
 explanation = explainer.explain_instance(instance, best_model.predict_proba, num_features=len(x_train.columns))
-'''
+
 # Visualize the explanation
 explanation.show_in_notebook()
 
@@ -407,7 +408,7 @@ prediction_probabilities = explanation.predict_proba
 
 # Print the prediction probabilities
 print("Prediction Probabilities:", prediction_probabilities)
-'''
+
 
 
 # Get the explanation in a format that can be plotted
@@ -436,7 +437,7 @@ print("Rules applied by LIME:")
 for feature, weight in explanation_list:
     print(f"Feature: {feature}, Weight: {weight}")
 
-
+'''
 
 #################    RULES    ###########################333
 
@@ -522,9 +523,9 @@ plt.title("Confusion Matrix")
 plt.show()
 
 
-'''
+
 if test_recall > 0 and test_precision > 0:
     print("\nSalvou o Modelo")
-    joblib.dump(best_model, 'best_model__light.pkl')
-    '''
+    joblib.dump(best_model, 'best_model__CatBoost.pkl')
+
 
