@@ -37,13 +37,14 @@ https://github.com/miguelalmeida8/thesis/assets/115362237/b73bb34d-c52a-4700-bfa
 
 ## How to Use
 
-1. **Clone the Repository:**
+1. **Clone the Repository**
 
-2. **Install Dependencies:**
+2. **Run the System:**
+   - Navigate to the directory containing the MQTT file (App/MQTT/mqtt.py) and the principal file (app/principal.py)
+   - Run the MQTT file
+   - Run the Principal file
 
-3. **Run the System:**
-
-4. **Access the User Interface:**
+2. **Access the User Interface:**
 Open your web browser and navigate to `http://localhost:5000` to interact with the system.
 
 
