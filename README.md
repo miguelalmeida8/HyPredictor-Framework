@@ -29,3 +29,16 @@ Our hybrid approach significantly improves prediction accuracy, achieving an F1 
 ## Demonstration
 
 For a detailed demonstration of how our system works, please watch the [video](https://your-video-link.com). The video provides an in-depth look at the system's functionality, including real-time failure detection, sensor data visualization, failure report management, rule management, and model explanations.
+
+## How to Use
+
+1. **Clone the Repository:**
+
+2. **Install Dependencies:**
+
+3. **Run the System:**
+
+4. **Access the User Interface:**
+Open your web browser and navigate to `http://localhost:5000` to interact with the system.
+
+
