@@ -15,7 +15,16 @@ Welcome to the repository for the comprehensive Failure Prediction and Reporting
 
 ## Performance Highlights
 
-The hybrid approach significantly improves prediction accuracy, achieving an F1 Score of up to 93% and a Recall of 91% in failure prediction. By integrating domain-specific rules, the system's performance was enhanced by up to 28% in the F1 Score for some prediction models. This adaptive system not only boosts prediction accuracy but also fosters proactive maintenance, reducing downtime and operational costs.
+Our hybrid approach significantly improves prediction accuracy, achieving an F1 Score of up to 93% and a Recall of 91% in failure prediction. By integrating domain-specific rules, the system's performance was enhanced by up to 28% in the F1 Score for some prediction models. This adaptive system not only boosts prediction accuracy but also fosters proactive maintenance, reducing downtime and operational costs.
+
+## Comparison of Model Performance Before and After Rules
+
+| **Metrics**      | **RF Before** | **RF After** | **XGBoost Before** | **XGBoost After** | **LGBM Before** | **LGBM After** | **CatBoost Before** | **CatBoost After** |
+|------------------|---------------|--------------|--------------------|-------------------|-----------------|---------------|---------------------|--------------------|
+| Recall (%)       | 90.685        | 90.999       | 91.991             | 91.991            | 88.786          | 90.748        | 91.413              | 91.413             |
+| F1 Score (%)     | 64.655        | 93.093       | 90.104             | 90.471            | 92.144          | 92.232        | 89.303              | 90.771             |
+| Precision (%)    | 50.236        | 95.285       | 88.293             | 89.001            | 95.767          | 95.855        | 87.288              | 90.137             |
+| Accuracy (%)     | 96.586        | 99.535       | 99.305             | 99.333            | 99.479          | 99.547        | 99.247              | 99.547             |
 
 ## Demonstration
 
