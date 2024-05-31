@@ -15,7 +15,7 @@ Welcome to the repository for the comprehensive Failure Prediction and Reporting
 
 ## Performance Highlights
 
-Our hybrid approach significantly improves prediction accuracy, achieving an F1 Score of up to 93% and a Recall of 91% in failure prediction. By integrating domain-specific rules, the system's performance was enhanced by up to 28% in the F1 Score for some prediction models. This adaptive system not only boosts prediction accuracy but also fosters proactive maintenance, reducing downtime and operational costs.
+The hybrid approach significantly improves prediction accuracy, achieving an F1 Score of up to 93% and a Recall of 91% in failure prediction. By integrating domain-specific rules, the system's performance was enhanced by up to 28% in the F1 Score for some prediction models. This adaptive system not only boosts prediction accuracy but also fosters proactive maintenance, reducing downtime and operational costs.
 
 ## Comparison of Model Performance Before and After Rules
 
@@ -28,7 +28,7 @@ Our hybrid approach significantly improves prediction accuracy, achieving an F1 
 
 ## Demonstration
 
-For a detailed demonstration of how our system works, please watch the [video](https://your-video-link.com). The video provides an in-depth look at the system's functionality, including real-time failure detection, sensor data visualization, failure report management, rule management, and model explanations.
+For a detailed demonstration of how the system works, please watch the [video](https://your-video-link.com). The video provides an in-depth look at the system's functionality, including real-time failure detection, sensor data visualization, failure report management, rule management, and model explanations.
 
 ## How to Use
 
