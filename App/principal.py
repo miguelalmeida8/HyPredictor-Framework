@@ -10,6 +10,8 @@ import dill
 import numpy as np
 import matplotlib.pyplot as plt
 import json
+import lime.lime_tabular
+import os
 
 app = Flask(__name__)
 
@@ -108,7 +110,7 @@ with open(explainer_file_path, 'rb') as f:
 
 
 def generate_explanation(df):
-    global explanation_text, prediction_probabilities
+    global explanation_text, prediction_probabilities, explainer
 
     # Generate Lime explanation
     explanation = explainer.explain_instance(df.values[0], model.predict_proba, num_features=7)
@@ -310,7 +312,7 @@ def add_failure_report():
 
 @app.route('/submit_form', methods=['POST'])
 def submit_form():
-    global nr, model
+    global nr, model, explainer
     if request.method == 'POST':
         try:
             conn = psycopg2.connect(
@@ -376,6 +378,10 @@ def submit_form():
 
             # Retrain the model
             model.fit(X, y)
+
+            explainer = lime.lime_tabular.LimeTabularExplainer(training_data=X.values,
+                                                               mode='classification',
+                                                               feature_names=X.columns.tolist())
 
 
             # Redirect to a success page or render a success message

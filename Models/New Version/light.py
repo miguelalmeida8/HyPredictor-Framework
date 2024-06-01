@@ -528,9 +528,9 @@ plt.title("Confusion Matrix")
 plt.show()
 
 
-'''
+
 if test_recall > 0 and test_precision > 0:
     print("\nSalvou o Modelo")
     joblib.dump(best_model, 'best_model__light.pkl')
 
-'''
+
