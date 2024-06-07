@@ -69,7 +69,7 @@ for index, row in failure_report.iterrows():
     data.loc[mask, 'failure'] = 1
 
 
-################################  Feature Enginnering #####################################
+################################  Feature Enginneering #####################################
 #Interval
 interval = '15min'
 
@@ -246,7 +246,7 @@ given_date = pd.to_datetime('2020-06-04')  # June 4, 2020
 # Filter out rows before April 2020
 data_filter = data[data['timestamp'] >= '2020-04-12']
 # data_filter = data
-# data_filter = data_filter[data_filter['timestamp'] <= '2020-07-05']
+data_filter = data_filter[data_filter['timestamp'] < '2020-08-01']
 
 # Filter data based on the given date
 train_data = data_filter[data_filter['timestamp'] < given_date].drop(columns=['timestamp'])
@@ -306,7 +306,7 @@ print(grid_search.best_params_)
 # Get the best parameters
 best_params = grid_search.best_params_
 
-best_model.fit(x_train, np.ravel(y_train))
+#best_model.fit(x_train, np.ravel(y_train))
 
 # Predictions on the training set
 y_train_pred = best_model.predict(x_train)
@@ -528,9 +528,9 @@ plt.title("Confusion Matrix")
 plt.show()
 
 
-
+'''
 if test_recall > 0 and test_precision > 0:
     print("\nSalvou o Modelo")
     joblib.dump(best_model, 'best_model__light.pkl')
-
+'''
 

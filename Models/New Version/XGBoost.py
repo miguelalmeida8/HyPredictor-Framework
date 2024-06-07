@@ -275,9 +275,8 @@ print(x_train.columns)
 param_grid = {
     'learning_rate': [0.1],
     'n_estimators': [100],
-    'max_depth': [1],
-    'min_child_samples': [1],
-    'reg_lambda': [0.1]
+    'max_depth': [3],
+    'reg_lambda': [0.01]
 }
 
 '''

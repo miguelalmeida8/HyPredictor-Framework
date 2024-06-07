@@ -1,21 +1,14 @@
 import pandas as pd
-import seaborn as sns
 import numpy as np
-import matplotlib.pyplot as plt
-import os
-import zipfile
-from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import make_scorer, recall_score
 import joblib
-import lightgbm as lgb
-from catboost import CatBoostClassifier
-import xgboost as xgb
+from sklearn.ensemble import VotingClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+
 
 DATA = r'C:\Users\migue\Desktop\metropt_dataset\MetroPT3(AirCompressor).csv'
 
@@ -71,11 +64,7 @@ for index, row in failure_report.iterrows():
 
 ################################  Feature Enginnering #####################################
 #Interval
-#interval = '5min'
-#interval = '10min'
 interval = '15min'
-#interval = '20min'
-#interval = '30min'
 
 #DV_pressure
 median_dv_pressure = data.set_index('timestamp').resample(interval)['DV_pressure'].median()
@@ -250,7 +239,7 @@ given_date = pd.to_datetime('2020-06-04')  # June 4, 2020
 # Filter out rows before April 2020
 data_filter = data[data['timestamp'] >= '2020-04-12']
 # data_filter = data
-# data_filter = data_filter[data_filter['timestamp'] <= '2020-07-05']
+data_filter = data_filter[data_filter['timestamp'] < '2020-08-01']
 
 # Filter data based on the given date
 train_data = data_filter[data_filter['timestamp'] < given_date].drop(columns=['timestamp'])
@@ -275,46 +264,37 @@ scoring = make_scorer(recall_score)
 
 print(x_train.columns)
 
-param_grid = {
-    'learning_rate': [0.1],
-    'n_estimators': [100],
-    'max_depth': [1],
-    'min_child_samples': [1],
-    'reg_lambda': [0.1]
-}
+# Load saved models
+lightgbm_model = joblib.load('best_model__light.pkl')
+catboost_model = joblib.load('best_model__CatBoost.pkl')
+xgb_model = joblib.load('best_model__XGBoost.pkl')
+gbm_model = joblib.load('best_model__gbm.pkl')
+rf_model = joblib.load('best_model__random_forest.pkl')
 
-'''
-param_grid = {
-    'learning_rate': [0.01, 0.012, 0.008],
-    'n_estimators': [70, 100, 130, 160, 200],
-    'max_depth': [1],
-    'min_child_samples': [1],
-    'reg_lambda': [0.1, 0.01, 0.12, 0.14, 0.008],
-}
-'''
-# Create LightGBM Classifier
-model = lgb.LGBMClassifier(verbose=0)
 
-# Create Grid Search
-grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring=scoring, verbose=5)
+# Create a voting classifier with already fitted models
+voting_clf = VotingClassifier(
+    estimators=[
 
-# Fit the grid search to the training data
-grid_search.fit(x_train, y_train)
+        ('xgb', xgb_model),
+        ('catboost', catboost_model),
+        ('lightgbm', lightgbm_model),
+        #('rf', rf_model),
+        ('gbm_model', gbm_model)
+    ],
+    voting='soft',  # Use 'hard' for majority voting or 'soft' for weighted voting
+    weights=[0.2533, 0.2517,  0.2445, 0.2506] #recall
+    #weights=[0.2504, 0.2482,0.2561, 0.2454] #f1
+    #weights=[0.2472, 0.2444, 0.2682, 0.2402] precision
+    #weights=[0.4911, 0.5089]
+    #weights=[0.1956, 0.2027, 0.2014, 0.1998, 0.2005] re
+    #weights=[0.2171, 0.2122, 0.2104, 0.1523, 0.2080]
+)
 
-# Get the best estimator (model)
-best_model = grid_search.best_estimator_
+voting_clf.fit(x_train, y_train)
 
-print("Best parameters found during grid search:")
-print(grid_search.best_params_)
-
-# Get the best parameters
-best_params = grid_search.best_params_
-
-best_model.fit(x_train, np.ravel(y_train))
-
-# Predictions on the training set
-y_train_pred = best_model.predict(x_train)
-y_test_pred = best_model.predict(x_test)
+y_train_pred = voting_clf.predict(x_train)
+y_test_pred = voting_clf.predict(x_test)
 
 # Calculate evaluation metrics on the training set
 train_accuracy = accuracy_score(y_train, y_train_pred)
@@ -342,10 +322,132 @@ print("Recall:", test_recall)
 print("F1 Score:", test_f1_score)
 
 
+# Create confusion matrix
+conf_mat = confusion_matrix(y_test, y_test_pred)
+
+# Define class labels
+class_labels = ["False", "Pos"]
+
+# Plot confusion matrix with custom labels
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_mat, annot=True, fmt="d", cmap="Greens", cbar=False, xticklabels=class_labels, yticklabels=class_labels)
+plt.xlabel("Predicted labels")
+plt.ylabel("True labels")
+plt.title("Confusion Matrix")
+plt.show()
+
+# Find the index of the first failure prediction in the test data
+failure_index = None
+for idx, pred in enumerate(y_test_pred):
+    if pred == 1:
+        failure_index = idx
+        break
+
+# Print the index of the first failure prediction
+print("Index of the first failure prediction in the test data:", failure_index)
 
 
 
 
+import lime
+import lime.lime_tabular
+
+# Initialize the LIME explainer
+explainer = lime.lime_tabular.LimeTabularExplainer(training_data=x_train.values,
+                                                   mode='classification',
+                                                   feature_names=x_train.columns.tolist())
 
 
+
+
+#################    RULES    ###########################333
+
+test_predictions_with_rules = pd.Series(y_test_pred)
+test_predictions_with_rules.index = y_test.index
+
+count=0
+certa=0
+
+for n in range(len(test_predictions_with_rules)):
+    if test_predictions_with_rules[n] == 0 and x_test.iloc[n]['median_oil_temperature'] > 83:
+        test_predictions_with_rules[n] = 1
+        count = count+1
+        if y_test[n] == 1:
+            certa = certa+1
+
+print(count)
+print(certa)
+
+count=0
+certa=0
+
+for n in range(len(test_predictions_with_rules)):
+    if (test_predictions_with_rules[n] == 1 and x_test.iloc[n]['median_oil_temperature'] < 67.25):
+
+        test_predictions_with_rules[n] = 0
+        count = count+1
+        if y_test[n] == 0:
+            certa = certa+1
+
+print(count)
+print(certa)
+
+
+
+
+count=0
+certa=0
+
+for n in range(len(test_predictions_with_rules)):
+    if (test_predictions_with_rules[n] == 0 and x_test.iloc[n]['median_oil_temperature'] > 75.65 and x_test.iloc[n]['median_dv_pressure'] > -0.02):
+
+        test_predictions_with_rules[n] = 1
+        count = count+1
+        if y_test[n] == 1:
+            certa = certa+1
+
+print(count)
+print(certa)
+##############################################
+
+
+
+# Calculate evaluation metrics with expert rules applied
+test_accuracy_e = accuracy_score(y_test, test_predictions_with_rules)
+test_precision_e = precision_score(y_test, test_predictions_with_rules)
+test_recall_e = recall_score(y_test, test_predictions_with_rules)
+test_f1_score_e = f1_score(y_test, test_predictions_with_rules)
+
+# Print the evaluation metrics
+print("\nTest Accuracy (with expert rules):", test_accuracy_e)
+print("Test Precision (with expert rules):", test_precision_e)
+print("Test Recall (with expert rules):", test_recall_e)
+print("Test F1 Score (with expert rules):", test_f1_score_e)
+
+print("\nRecall Difference:", (test_recall_e-test_recall)*100)
+print("Precision Difference:", (test_precision_e-test_precision)*100)
+print("F1-score Difference:", (test_f1_score_e-test_f1_score)*100)
+print("Accuracy Difference:", (test_accuracy_e-test_accuracy)*100)
+
+# Create confusion matrix
+conf_mat = confusion_matrix(y_test, test_predictions_with_rules)
+
+# Define class labels
+class_labels = ["False", "Pos"]
+
+# Plot confusion matrix with custom labels
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_mat, annot=True, fmt="d", cmap="Greens", cbar=False, xticklabels=class_labels, yticklabels=class_labels)
+plt.xlabel("Predicted labels")
+plt.ylabel("True labels")
+plt.title("Confusion Matrix")
+plt.show()
+
+
+'''
+if test_recall > 0 and test_precision > 0:
+    print("\nSalvou o Modelo")
+    joblib.dump(voting_clf, 'best_model__voting.pkl')
+'''
 
