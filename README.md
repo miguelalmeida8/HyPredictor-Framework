@@ -31,7 +31,8 @@ The hybrid approach significantly improves prediction accuracy, achieving an F1 
 For a detailed demonstration of how the system works, please watch this video. The video provides an in-depth look at the system's functionality, including real-time failure detection, sensor data visualization, failure report management, rule management, and model explanations.
 
 
-https://github.com/miguelalmeida8/thesis/assets/115362237/b73bb34d-c52a-4700-bfa6-7c0f4e593218
+https://github.com/miguelalmeida8/HyPredictor-Framework/assets/115362237/a7dfcd6d-442c-4a4c-840c-59564861a939
+
 
 
 
