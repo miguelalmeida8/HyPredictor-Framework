@@ -276,9 +276,6 @@ print(x_train.columns)
 param_grid = {
     'n_estimators': [100, 200, 300, 400, 500],
     'max_depth': [1, 10, None],  # Adding more depth options
-    #'min_samples_split': [2, 5],  # min_child_samples equivalent
-    #'min_samples_leaf': [1, 2, 4],  # Adding min_samples_leaf parameter
-    #'max_features': ['auto', 'sqrt', 'log2'],  # Adding max_features parameter
     'bootstrap': [True, False],  # Adding bootstrap parameter
 }
 

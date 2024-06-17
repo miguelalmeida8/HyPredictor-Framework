@@ -99,10 +99,10 @@ topic = "data"
 data_window = deque(maxlen=900)  # Assuming 10 seconds * 900 = 15 minutes
 
 # Load machine learning model
-model = joblib.load('models/best_model__light.pkl')
+model = joblib.load('models/best_model__gbm.pkl')
 
 # Lime explainer file
-explainer_file_path = 'models/explainer_lime.pkl'
+explainer_file_path = 'models/explainer_gbm.pkl'
 
 # Load the explainer object from the file
 with open(explainer_file_path, 'rb') as f:

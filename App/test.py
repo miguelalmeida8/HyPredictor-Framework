@@ -97,10 +97,10 @@ topic = "data"
 data_window = deque(maxlen=900)  # Assuming 10 seconds * 900 = 15 minutes
 
 # Load machine learning model
-model = joblib.load('models/best_model__light.pkl')
+model = joblib.load('models/best_model__gbm.pkl')
 
 # Lime explainer file
-explainer_file_path = 'models/explainer_lime.pkl'
+explainer_file_path = 'models/explainer_gbm.pkl'
 
 # Load the explainer object from the file
 with open(explainer_file_path, 'rb') as f:
@@ -165,7 +165,6 @@ import time
 execution_times = []
 
 def on_message(client, userdata, message):
-    start_time = time.time()
 
     Batch_size = 10
     global data_window
@@ -235,13 +234,21 @@ def on_message(client, userdata, message):
     towers = df['median_Towers'].iloc[-1]
     prediction = int(prediction)
 
-
+    start_time = time.time()
     # Generate LIME explanation
     generate_explanation(df)
 
+    end_time = time.time()
+    execution_time = end_time - start_time
+    execution_times.append(execution_time)
+    average_time = sum(execution_times) / len(execution_times)
 
+    print(f"Time taken for this execution: {execution_time:.4f} seconds")
+    print(f"Average time over {len(execution_times)} executions: {average_time:.4f} seconds")
 
     print(len(data_window))
+
+
 
     # Check if it's time to commit
     if len(data_window) % Batch_size == 0:
@@ -279,14 +286,6 @@ def on_message(client, userdata, message):
         v_towers.clear()
         v_predictions.clear()
         v_timestamps.clear()
-
-    end_time = time.time()
-    execution_time = end_time - start_time
-    execution_times.append(execution_time)
-    average_time = sum(execution_times) / len(execution_times)
-
-    print(f"Time taken for this execution: {execution_time:.4f} seconds")
-    print(f"Average time over {len(execution_times)} executions: {average_time:.4f} seconds")
 
 
 

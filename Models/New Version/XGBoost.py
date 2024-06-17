@@ -271,20 +271,11 @@ y_test = test_data['failure']  # Target variable for test set
 scoring = make_scorer(recall_score)
 
 print(x_train.columns)
-'''
-param_grid = {
-    'learning_rate': [0.1],
-    'n_estimators': [100],
-    'max_depth': [3],
-    'reg_lambda': [0.01]
-}
 
-'''
 param_grid = {
     'learning_rate': [0.01,  0.1],
     'n_estimators': [80, 100, 160, 200, 300],
     'max_depth': [1, 3, 5, None],
-    #'min_child_weight': [1, 2, 3],
     'reg_lambda': [0.1, 0.01,],
 }
 

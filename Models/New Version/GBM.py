@@ -1,21 +1,13 @@
 import pandas as pd
-import seaborn as sns
 import numpy as np
-import matplotlib.pyplot as plt
-import os
-import zipfile
-from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import make_scorer, recall_score
 import joblib
-import lightgbm as lgb
-from catboost import CatBoostClassifier
-import xgboost as xgb
+from sklearn.ensemble import GradientBoostingClassifier
+
 
 DATA = r'C:\Users\migue\Desktop\metropt_dataset\MetroPT3(AirCompressor).csv'
 
@@ -69,28 +61,28 @@ for index, row in failure_report.iterrows():
     data.loc[mask, 'failure'] = 1
 
 
-################################  Feature Enginneering #####################################
+################################  Feature Enginnering #####################################
 #Interval
 interval = '15min'
 
 #DV_pressure
-median_dv_pressure = data.set_index('timestamp').resample(interval)['DV_pressure'].median()
-data = data.merge(median_dv_pressure, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True, suffixes=('', '_median'))
-data.rename(columns={'DV_pressure_median': 'median_dv_pressure'}, inplace=True)
+median_DV_pressure = data.set_index('timestamp').resample(interval)['DV_pressure'].median()
+data = data.merge(median_DV_pressure, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True, suffixes=('', '_median'))
+data.rename(columns={'DV_pressure_median': 'median_DV_pressure'}, inplace=True)
 data.drop(columns=['key_0'], inplace=True)
 data = data.drop(columns=['DV_pressure'])
 
 #Oil_temperature
-median_oil_temperature = data.set_index('timestamp').resample(interval)['Oil_temperature'].median()
-data = data.merge(median_oil_temperature, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
-data.rename(columns={'Oil_temperature_y': 'median_oil_temperature'}, inplace=True)
+median_Oil_temperature = data.set_index('timestamp').resample(interval)['Oil_temperature'].median()
+data = data.merge(median_Oil_temperature, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
+data.rename(columns={'Oil_temperature_y': 'median_Oil_temperature'}, inplace=True)
 data.drop(columns=['key_0'], inplace=True)
 data = data.drop(columns=['Oil_temperature_x'])
 
 #Motor_current
-median_motor_current = data.set_index('timestamp').resample(interval)['Motor_current'].median()
-data = data.merge(median_motor_current, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
-data.rename(columns={'Motor_current_y': 'median_motor_current'}, inplace=True)
+median_Motor_current = data.set_index('timestamp').resample(interval)['Motor_current'].median()
+data = data.merge(median_Motor_current, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
+data.rename(columns={'Motor_current_y': 'median_Motor_current'}, inplace=True)
 data.drop(columns=['key_0'], inplace=True)
 data = data.drop(columns=['Motor_current_x'])
 
@@ -102,30 +94,30 @@ data.drop(columns=['key_0'], inplace=True)
 data = data.drop(columns=['TP3_x'])
 
 #TP2
-median_tp2 = data.set_index('timestamp').resample(interval)['TP2'].median()
-data = data.merge(median_tp2, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
-data.rename(columns={'TP2_y': 'median_tp2'}, inplace=True)
+median_TP2 = data.set_index('timestamp').resample(interval)['TP2'].median()
+data = data.merge(median_TP2, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
+data.rename(columns={'TP2_y': 'median_TP2'}, inplace=True)
 data.drop(columns=['key_0'], inplace=True)
 data = data.drop(columns=['TP2_x'])
 
 #H1
-median_h1 = data.set_index('timestamp').resample(interval)['H1'].median()
-data = data.merge(median_h1, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
-data.rename(columns={'H1_y': 'median_h1'}, inplace=True)
+median_H1 = data.set_index('timestamp').resample(interval)['H1'].median()
+data = data.merge(median_H1, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
+data.rename(columns={'H1_y': 'median_H1'}, inplace=True)
 data.drop(columns=['key_0'], inplace=True)
 data = data.drop(columns=['H1_x'])
 
 #Reservoirs
-median_reservoirs = data.set_index('timestamp').resample(interval)['Reservoirs'].median()
-data = data.merge(median_reservoirs, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
-data.rename(columns={'Reservoirs_y': 'median_reservoirs'}, inplace=True)
+median_Reservoirs = data.set_index('timestamp').resample(interval)['Reservoirs'].median()
+data = data.merge(median_Reservoirs, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
+data.rename(columns={'Reservoirs_y': 'median_Reservoirs'}, inplace=True)
 data.drop(columns=['key_0'], inplace=True)
 data = data.drop(columns=['Reservoirs_x'])
 
 #Towers
 median_towers = data.set_index('timestamp').resample(interval)['Towers'].median()
 data = data.merge(median_towers, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
-data.rename(columns={'Towers_y': 'median_towers'}, inplace=True)
+data.rename(columns={'Towers_y': 'median_Towers'}, inplace=True)
 data.drop(columns=['key_0'], inplace=True)
 data = data.drop(columns=['Towers_x'])
 
@@ -139,7 +131,7 @@ data = data.drop(columns=['COMP_x'])
 #DV_electric
 median_dv_eletric = data.set_index('timestamp').resample(interval)['DV_eletric'].median()
 data = data.merge(median_dv_eletric, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
-data.rename(columns={'DV_eletric_y': 'median_dv_eletric'}, inplace=True)
+data.rename(columns={'DV_eletric_y': 'median_DV_eletric'}, inplace=True)
 data.drop(columns=['key_0'], inplace=True)
 data = data.drop(columns=['DV_eletric_x'])
 
@@ -167,7 +159,7 @@ data = data.drop(columns=['Pressure_switch_x'])
 #Oil_level
 median_oil_level = data.set_index('timestamp').resample(interval)['Oil_level'].median()
 data = data.merge(median_oil_level, how='left', left_on=data['timestamp'].dt.floor(interval), right_index=True)
-data.rename(columns={'Oil_level_y': 'median_oil_level'}, inplace=True)
+data.rename(columns={'Oil_level_y': 'median_Oil_level'}, inplace=True)
 data.drop(columns=['key_0'], inplace=True)
 data = data.drop(columns=['Oil_level_x'])
 
@@ -230,7 +222,7 @@ print("Pairs of Variables with Correlation > 0.8:")
 for pair in high_correlation_variables:
     print(pair)
 
-columns_to_drop = ['median_tp3', 'median_mpg', 'median_dv_eletric', 'median_comp']
+columns_to_drop = ['median_tp3', 'median_mpg', 'median_DV_eletric', 'median_comp']
 
 for column in columns_to_drop:
     if column in data.columns:
@@ -259,6 +251,7 @@ test_data.reset_index(drop=True, inplace=True)
 
 print("Training dataset size:", len(train_data))
 print("Test dataset size:    ", len(test_data))
+print(train_data.columns)
 
 # Split features and target variables for training and testing
 x_train = train_data.drop(columns=['failure'])  # Features for training set
@@ -270,17 +263,16 @@ y_test = test_data['failure']  # Target variable for test set
 scoring = make_scorer(recall_score)
 
 print(x_train.columns)
+print(x_test.columns)
 
 param_grid = {
-    'learning_rate': [0.01, 0.012, 0.008, 0.1],
-    'n_estimators': [70, 100, 130, 160, 200],
-    'max_depth': [1],
-    'min_child_samples': [1],
-    'reg_lambda': [0.1, 0.01, 0.12, 0.14, 0.008],
+    'learning_rate': [0.01, 0.1],
+    'n_estimators': [100, 300],
+    'max_depth': [1, 3, None],
 }
 
-# Create LightGBM Classifier
-model = lgb.LGBMClassifier(verbose=0)
+# Create Gradient Boosting Machine Classifier
+model = GradientBoostingClassifier(verbose=0)
 
 # Create Grid Search
 grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring=scoring, verbose=5)
@@ -368,7 +360,7 @@ explainer = lime.lime_tabular.LimeTabularExplainer(training_data=x_train.values,
 import dill
 
 # Save the explainer object to a file using dill
-with open('explainer_lime.pkl', 'wb') as f:
+with open('explainer_gbm.pkl', 'wb') as f:
     dill.dump(explainer, f)
 
 
@@ -444,7 +436,7 @@ count=0
 certa=0
 
 for n in range(len(test_predictions_with_rules)):
-    if test_predictions_with_rules[n] == 0 and x_test.iloc[n]['median_oil_temperature'] > 83:
+    if test_predictions_with_rules[n] == 0 and x_test.iloc[n]['median_Oil_temperature'] > 83:
         test_predictions_with_rules[n] = 1
         count = count+1
         if y_test[n] == 1:
@@ -457,7 +449,7 @@ count=0
 certa=0
 
 for n in range(len(test_predictions_with_rules)):
-    if (test_predictions_with_rules[n] == 1 and x_test.iloc[n]['median_oil_temperature'] < 67.25):
+    if (test_predictions_with_rules[n] == 1 and x_test.iloc[n]['median_Oil_temperature'] < 67.25):
 
         test_predictions_with_rules[n] = 0
         count = count+1
@@ -474,7 +466,7 @@ count=0
 certa=0
 
 for n in range(len(test_predictions_with_rules)):
-    if (test_predictions_with_rules[n] == 0 and x_test.iloc[n]['median_oil_temperature'] > 75.65 and x_test.iloc[n]['median_dv_pressure'] > -0.02):
+    if (test_predictions_with_rules[n] == 0 and x_test.iloc[n]['median_Oil_temperature'] > 75.65 and x_test.iloc[n]['median_DV_pressure'] > -0.02):
 
         test_predictions_with_rules[n] = 1
         count = count+1
@@ -519,9 +511,9 @@ plt.title("Confusion Matrix")
 plt.show()
 
 
-'''
+
 if test_recall > 0 and test_precision > 0:
     print("\nSalvou o Modelo")
-    joblib.dump(best_model, 'best_model__light.pkl')
-'''
+    joblib.dump(best_model, 'best_model__gbm.pkl')
+
 

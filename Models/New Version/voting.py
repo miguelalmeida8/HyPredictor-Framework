@@ -269,8 +269,6 @@ lightgbm_model = joblib.load('best_model__light.pkl')
 catboost_model = joblib.load('best_model__CatBoost.pkl')
 xgb_model = joblib.load('best_model__XGBoost.pkl')
 gbm_model = joblib.load('best_model__gbm.pkl')
-rf_model = joblib.load('best_model__random_forest.pkl')
-
 
 # Create a voting classifier with already fitted models
 voting_clf = VotingClassifier(
@@ -279,16 +277,10 @@ voting_clf = VotingClassifier(
         ('xgb', xgb_model),
         ('catboost', catboost_model),
         ('lightgbm', lightgbm_model),
-        #('rf', rf_model),
         ('gbm_model', gbm_model)
     ],
     voting='soft',  # Use 'hard' for majority voting or 'soft' for weighted voting
     weights=[0.2533, 0.2517,  0.2445, 0.2506] #recall
-    #weights=[0.2504, 0.2482,0.2561, 0.2454] #f1
-    #weights=[0.2472, 0.2444, 0.2682, 0.2402] precision
-    #weights=[0.4911, 0.5089]
-    #weights=[0.1956, 0.2027, 0.2014, 0.1998, 0.2005] re
-    #weights=[0.2171, 0.2122, 0.2104, 0.1523, 0.2080]
 )
 
 voting_clf.fit(x_train, y_train)

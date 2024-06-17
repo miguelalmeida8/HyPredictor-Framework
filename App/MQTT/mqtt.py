@@ -11,6 +11,7 @@ topic = "data"  # replace this with the topic you want to publish to
 
 
 # Function to publish data from CSV file
+
 def publish_data(filename):
     # Create an MQTT client instance
     client = mqtt.Client()
@@ -30,7 +31,6 @@ def publish_data(filename):
 
     # Disconnect from the broker
     client.disconnect()
-
 
 # Replace 'your_dataset.csv' with the path to your CSV file
 publish_data("C:/Users/migue/Downloads/test_data.csv")
