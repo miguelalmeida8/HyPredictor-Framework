@@ -4,19 +4,19 @@
 {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    text-decoration: none;
     border: 0;
     list-style: none;
+    box-sizing: border-box;
+    text-decoration: none;
     appearance: none;
 }
 
 body
 {
     font-family: 'Poppins', sans-serif;
-    width: 100vw;
+    font-size: 0.89rem;
     height: 100vh;
-    font-size: 0.88rem;
+    width: 100vw;
     user-select: none;
     overflow-x: hidden;
     background: #f6f6f9;
@@ -24,24 +24,24 @@ body
 
 .container
 {
-    display: grid;
-    width: 96%;
     gap: 1.8rem;
+    display: grid;
     grid-template-columns: 16rem auto;
     margin: 0 auto;
+    width: 96%;
 }
 h1
 {
-    font-weight: 800;
     font-size: 1.8rem;
+    font-weight: 800;
 }
 h2
 {
-    font-size: 1.7rem;
+    font-size: 1.69rem;
 }
 h3
 {
-    font-size: 0.95rem;
+    font-size: 0.96rem;
 }
 h4
 {
@@ -51,12 +51,12 @@ leftside{
     height:100vh;
 }
 leftside .top{
+    margin-top: 1.4rem;
+    height: 4rem;
     background-color: #fff;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-top: 1.4rem;
-    height: 4rem;
 }
 leftside .logo{
     display: flex;
@@ -103,7 +103,7 @@ leftside .sidebar a:last-child{
 }
 
 leftside .sidebar a.active{
-    background: rgba(132, 139, 200, 0.18);
+    background: #848bc82b;
     color: #04d9ff;
     margin-left:0;
 }
@@ -145,11 +145,11 @@ main .dashboards{
 main .dashboards>div{
     background-color: #fff;
     padding: 1.8rem;
+    box-shadow: 0 2rem 3rem #848bc82b;
     border-radius: 2rem;
-    margin-top: 2rem;
-    box-shadow: 0 2rem 3rem rgba(132, 139, 200, 0.18);
     transition: all .3s ease;
     height: 20rem;
+    margin-top: 2rem;
 }
 
 main .dashboards > div:last-child {
@@ -188,7 +188,7 @@ main .dashboards>div:hover{
     padding: 34px;
     background-color: #f9f9f9;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px #0000001a;
     margin-top: 3rem;
   }
 
@@ -198,7 +198,7 @@ main .dashboards>div:hover{
     padding: 34px;
     background-color: #f9f9f9;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px #0000001a;
     margin-top: 3rem;
   }
 
@@ -208,16 +208,16 @@ main .dashboards>div:hover{
     padding: 34px;
     background-color: #f9f9f9;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px #0000001a;
     margin-top: 3rem;
   }
 
 .second-button {
     margin-top: 1rem;
-    margin-left: auto; /* Set left margin to auto */
-    margin-right: auto; /* Set right margin to auto */
-    display: block; /* Ensure button is block-level element */
-    text-align: center; /* Center the text within the button */
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    text-align: center;
     margin-bottom: 1rem;
 }
 
@@ -293,10 +293,10 @@ select, input[type="text"] {
 /***************** Rules List *************************/
 .rule {
     margin-top: 1.6rem;
-    background-color: rgba(132, 139, 200, 0.18); /* Add background color */
-    padding: 20px; /* Add padding to create space around the text */
-    margin-bottom: 20px; /* Add margin to create space between rules */
-    border-radius: 10px; /* Add border radius for rounded corners */
+    background-color: #848bc82b;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
 }
 
 .button_rules{
@@ -311,13 +311,13 @@ select, input[type="text"] {
 }
 
 .button_rules:hover {
-    background-color: red; /* Change background color on hover */
-    color: white; /* Change text color on hover */
+    background-color: red;
+    color: white;
 }
 
 
 .rule p {
-    margin: 5px 0; /* Add margin to separate paragraphs */
+    margin: 5px 0;
     font-size: 1.1rem;
 }
 
@@ -331,11 +331,11 @@ select, input[type="text"] {
 }
 
 .feature-score-table h2.failure {
-    color: red; /* Set color to red for failure prediction */
+    color: red;
 }
 
 .feature-score-table h2.no_failure {
-    color: green; /* Set color to green for no failure prediction */
+    color: green;
 }
 
 table {
@@ -372,51 +372,51 @@ th, td {
     color: black;
     font-weight: normal;
     font-size: 1rem;
-    line-height: 2.6; /* Adjust the line height for spacing between lines */
+    line-height: 2.6;
     margin-left: 10%;
 }
 
 
 /* Modal Styles */
 .modal {
-    display: none; /* Hide the modal by default */
-    position: fixed; /* Position the modal */
-    z-index: 1; /* Set the z-index to make sure it appears on top of other elements */
+    display: none;
+    position: fixed;
+    z-index: 1;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scrolling if needed */
-    background-color: rgba(0,0,0,0.4); /* Black background with transparency */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: #00000066;
 }
 
 /* Modal Content Styles */
 .modal-content {
-    background-color: #fefefe; /* White background */
-    margin: 15% auto; /* Center modal vertically and horizontally */
+    background-color: #fefefe;
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Set the width of the modal content */
-    max-width: 600px; /* Set maximum width for larger screens */
-    border-radius: 10px; /* Add rounded corners */
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Add shadow */
-    -webkit-box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Add shadow for older browsers */
-    -moz-box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Add shadow for older browsers */
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 #00000033;
+    -webkit-box-shadow: 0 4px 8px 0 #00000033;
+    -moz-box-shadow: 0 4px 8px 0 #00000033;
 }
 
 /* Close Button Styles */
 .close {
-    color: #aaa; /* Light gray color for the close button */
-    float: right; /* Float the button to the right */
-    font-size: 28px; /* Increase font size */
-    font-weight: bold; /* Make the button text bold */
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-    color: black; /* Change color on hover/focus */
-    text-decoration: none; /* Remove underline on hover/focus */
-    cursor: pointer; /* Change cursor to pointer on hover/focus */
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .question-mark {
@@ -429,6 +429,6 @@ th, td {
 }
 
 .modal-content p {
-    margin-bottom: 10px; /* Add margin-bottom to create space between paragraphs */
+    margin-bottom: 10px;
 }
 
