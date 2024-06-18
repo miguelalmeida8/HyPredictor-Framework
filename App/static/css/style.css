@@ -1,30 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-:root {
-    --clr-primary: #04d9ff;
-    --clr-danger: #ff7782;
-    --clr-success: #41f1b6;
-    --clr-white: #fff;
-    --clr-info-dark: #7d8da1;
-    --clr-info-light: #dce1eb;
-    --clr-dark: #363949;
-    --clr-warning: #ff4edc;
-    --clr-light: rgba(132, 139, 200, 0.18);
-    --clr-primary-variant: #111e88;
-    --clr-dark-variant: #677483;
-    --clr-color-background: #f6f6f9;
-
-    --card-border-radius: 2rem;
-    --border-radius-1: 0.4rem;
-    --border-radius-2: 0.8rem;
-    --border-radius-3: 1.2rem;
-
-    --card-padding: 1.8rem;
-    --padding-1: 1.2rem;
-    --box-shadow: 0 2rem 3rem var(--clr-light);
-
-}
-
 *
 {
     margin: 0;
@@ -44,7 +19,7 @@ body
     font-size: 0.88rem;
     user-select: none;
     overflow-x: hidden;
-    background: var(--clr-color-background);
+    background: #f6f6f9;
 }
 
 .container
@@ -55,12 +30,6 @@ body
     grid-template-columns: 16rem auto;
     margin: 0 auto;
 }
-
-a
-{
-    color: var(--clr-dark);
-}
-
 h1
 {
     font-weight: 800;
@@ -76,49 +45,13 @@ h3
 }
 h4
 {
-    font-size: 0.8rem;
+    font-size: 0.83rem;
 }
-h5
-{
-    font-size: 0.77rem;
-}
-small
-{
-    font-size: 0.75rem;
-}
-.profile-photo{
-    width: 2.8rem;
-    height: 2.8rem;
-    border-radius: 50%;
-    overflow: hidden;
-}
-.text-muted{
-    color: var(--clr-info-dark);
-}
-p{
-    color: var(--clr-dark-variant);
-}
-b{
-    color: var(--clr-dark);
-}
-.primary{
-    color: var(--clr-primary);
-}
-.success{
-    color: var(--clr-success);
-}
-.danger{
-    color: var(--clr-danger);
-}
-.warning{
-    color: var(--clr-warning);
-}
-
 leftside{
     height:100vh;
 }
 leftside .top{
-    background-color: var(--clr-white);
+    background-color: #fff;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -136,7 +69,7 @@ leftside .top div.close{
 
 leftside .sidebar
 {
-    background-color: var(--clr-white);
+    background-color: #fff;
     display:flex;
     flex-direction: column;
     height: 100vh;
@@ -150,7 +83,7 @@ leftside .h3{
 
 leftside .sidebar a{
     display: flex;
-    color: var(--clr-info-dark);
+    color: #7d8da2;
     margin-left: 2rem;
     gap:1rem;
     align-items: center;
@@ -170,8 +103,8 @@ leftside .sidebar a:last-child{
 }
 
 leftside .sidebar a.active{
-    background: var(--clr-light);
-    color: var(--clr-primary);
+    background: rgba(132, 139, 200, 0.18);
+    color: #04d9ff;
     margin-left:0;
 }
 
@@ -179,17 +112,16 @@ leftside .sidebar a.active::before{
     content: '';
     width: 6px;
     height: 100%;
-    background-color: var(--clr-primary);
+    background-color: #04d9ff;
 }
 
 leftside .sidebar a:hover{
-    color: var(--clr-primary);
+    color: #04d9ff;
 }
 leftside .sidebar a:hover span{
     margin-left: 1rem;
 
 }
-
 
 /***************** MAIN ***************************/
 
@@ -202,7 +134,7 @@ main input{
     background-color: transparent;
     border: 0;
     outline: 0;
-    color: var(--clr-dark)
+    color: #363949
 }
 
 main .dashboards{
@@ -211,11 +143,11 @@ main .dashboards{
     gap: 1.6rem;
 }
 main .dashboards>div{
-    background-color: var(--clr-white);
-    padding: var(--card-padding);
-    border-radius: var(--card-border-radius);
+    background-color: #fff;
+    padding: 1.8rem;
+    border-radius: 2rem;
     margin-top: 2rem;
-    box-shadow: var(--box-shadow);
+    box-shadow: 0 2rem 3rem rgba(132, 139, 200, 0.18);
     transition: all .3s ease;
     height: 20rem;
 }
@@ -240,13 +172,12 @@ main .dashboards>div:hover{
 }
 
 .dashboards > div h2.failure {
-    color: red; /* Set color to red for failure prediction */
+    color: red;
 }
 
 .dashboards > div h2.no_failure {
-    color: green; /* Set color to green for no failure prediction */
+    color: green;
 }
-
 
 
 /***************** Failure Report *************************/
@@ -320,7 +251,7 @@ main .dashboards>div:hover{
 
 
   button[type="submit"] {
-    background-color: var(--clr-primary);
+    background-color: #04d9ff;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -362,7 +293,7 @@ select, input[type="text"] {
 /***************** Rules List *************************/
 .rule {
     margin-top: 1.6rem;
-    background-color: var(--clr-light); /* Add background color */
+    background-color: rgba(132, 139, 200, 0.18); /* Add background color */
     padding: 20px; /* Add padding to create space around the text */
     margin-bottom: 20px; /* Add margin to create space between rules */
     border-radius: 10px; /* Add border radius for rounded corners */
@@ -370,7 +301,7 @@ select, input[type="text"] {
 
 .button_rules{
     margin-top: 1.3rem;
-    background-color: var(--clr-primary);
+    background-color: #04d9ff;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
