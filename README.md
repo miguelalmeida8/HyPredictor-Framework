@@ -36,17 +36,3 @@ https://github.com/miguelalmeida8/HyPredictor-Framework/assets/115362237/a7dfcd6
 
 
 
-
-## How to Use
-
-1. **Clone the Repository**
-
-2. **Run the System:**
-   - Navigate to the directory containing the MQTT file (App/MQTT/mqtt.py) and the principal file (app/principal.py)
-   - Run the MQTT file
-   - Run the Principal file
-
-2. **Access the User Interface:**
-Open your web browser and navigate to `http://localhost:5000` to interact with the system.
-
-
