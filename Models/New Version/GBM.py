@@ -3,10 +3,11 @@ import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 from sklearn.metrics import make_scorer, recall_score
 import joblib
 from sklearn.ensemble import GradientBoostingClassifier
+import lime.lime_tabular
 
 
 DATA = r'C:\Users\migue\Desktop\metropt_dataset\MetroPT3(AirCompressor).csv'
@@ -260,7 +261,7 @@ y_train = train_data['failure']  # Target variable for training set
 x_test = test_data.drop(columns=['failure'])  # Features for test set
 y_test = test_data['failure']  # Target variable for test set
 
-scoring = make_scorer(recall_score)
+scoring = make_scorer(recall_score, zero_division=1)
 
 print(x_train.columns)
 print(x_test.columns)
@@ -268,14 +269,16 @@ print(x_test.columns)
 param_grid = {
     'learning_rate': [0.01, 0.1],
     'n_estimators': [100, 300],
-    'max_depth': [1, 3, None],
+    'max_depth': [3, None],
 }
 
 # Create Gradient Boosting Machine Classifier
 model = GradientBoostingClassifier(verbose=0)
 
+tscv = TimeSeriesSplit(n_splits=5)
+
 # Create Grid Search
-grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring=scoring, verbose=5)
+grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=tscv, scoring=scoring, verbose=5)
 
 # Fit the grid search to the training data
 grid_search.fit(x_train, y_train)
@@ -288,8 +291,6 @@ print(grid_search.best_params_)
 
 # Get the best parameters
 best_params = grid_search.best_params_
-
-#best_model.fit(x_train, np.ravel(y_train))
 
 # Predictions on the training set
 y_train_pred = best_model.predict(x_train)
@@ -347,22 +348,17 @@ for idx, pred in enumerate(y_test_pred):
 print("Index of the first failure prediction in the test data:", failure_index)
 
 
-
-
-import lime
-import lime.lime_tabular
-
 # Initialize the LIME explainer
 explainer = lime.lime_tabular.LimeTabularExplainer(training_data=x_train.values,
                                                    mode='classification',
                                                    feature_names=x_train.columns.tolist())
-
+'''
 import dill
 
 # Save the explainer object to a file using dill
 with open('explainer_gbm.pkl', 'wb') as f:
     dill.dump(explainer, f)
-
+'''
 
 # Select a specific instance from your test dataset for explanation
 instance_index = 293851

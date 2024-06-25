@@ -4,18 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="686cb0c9-4c93-4143-9aa9-755ef84e76d5" name="Changes" comment="models included 1.1">
+    <list default="true" id="686cb0c9-4c93-4143-9aa9-755ef84e76d5" name="Changes" comment="css improved 1.1">
       <change afterPath="$PROJECT_DIR$/Models/New Version/catboost_info/catboost_training.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Models/New Version/catboost_info/learn/events.out.tfevents" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Models/New Version/catboost_info/learn_error.tsv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Models/New Version/catboost_info/time_left.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/New Version/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/models/best_model__gbm.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/App/models/best_model__gbm.pkl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/models/explainer_gbm.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/App/models/explainer_gbm.pkl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/static/images/explanation_plot.png" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/images/explanation_plot.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/New Version/CatBoost.py" beforeDir="false" afterPath="$PROJECT_DIR$/Models/New Version/CatBoost.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Models/New Version/GBM.py" beforeDir="false" afterPath="$PROJECT_DIR$/Models/New Version/GBM.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/New Version/explainer_gbm.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/Models/New Version/explainer_gbm.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/New Version/RandomForest.py" beforeDir="false" afterPath="$PROJECT_DIR$/Models/New Version/RandomForest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/New Version/XGBoost.py" beforeDir="false" afterPath="$PROJECT_DIR$/Models/New Version/XGBoost.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/New Version/explainer_lime.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/Models/New Version/explainer_lime.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/New Version/light.py" beforeDir="false" afterPath="$PROJECT_DIR$/Models/New Version/light.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -271,7 +273,8 @@
       <workItem from="1718633356991" duration="714000" />
       <workItem from="1718649614989" duration="1261000" />
       <workItem from="1718654374397" duration="211000" />
-      <workItem from="1718702491204" duration="1822000" />
+      <workItem from="1718702491204" duration="2707000" />
+      <workItem from="1719329182272" duration="9132000" />
     </task>
     <task id="LOCAL-00001" summary="files created">
       <option name="closed" value="true" />
@@ -481,7 +484,23 @@
       <option name="project" value="LOCAL" />
       <updated>1718654574916</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="css improved">
+      <option name="closed" value="true" />
+      <created>1718704493130</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1718704493130</updated>
+    </task>
+    <task id="LOCAL-00028" summary="css improved 1.1">
+      <option name="closed" value="true" />
+      <created>1718705193819</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1718705193819</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -535,17 +554,19 @@
     <MESSAGE value="Improvements" />
     <MESSAGE value="models included" />
     <MESSAGE value="models included 1.1" />
-    <option name="LAST_COMMIT_MESSAGE" value="models included 1.1" />
+    <MESSAGE value="css improved" />
+    <MESSAGE value="css improved 1.1" />
+    <option name="LAST_COMMIT_MESSAGE" value="css improved 1.1" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Hybrid_Approach$pdp.coverage" NAME="pdp Coverage Results" MODIFIED="1718369491560" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/App/XAI" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$LightGBM_5fold.coverage" NAME="LightGBM_5fold Coverage Results" MODIFIED="1711637607680" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset" />
-    <SUITE FILE_PATH="coverage/Hybrid_Approach$light.coverage" NAME="light Coverage Results" MODIFIED="1717412763936" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Models/New Version" />
-    <SUITE FILE_PATH="coverage/Hybrid_Approach$svm.coverage" NAME="svm Coverage Results" MODIFIED="1711654082353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset" />
+    <SUITE FILE_PATH="coverage/Hybrid_Approach$light.coverage" NAME="light Coverage Results" MODIFIED="1719337266673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Models/New Version" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$catboost_5fold.coverage" NAME="catboost_5fold Coverage Results" MODIFIED="1711640349035" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset" />
+    <SUITE FILE_PATH="coverage/Hybrid_Approach$svm.coverage" NAME="svm Coverage Results" MODIFIED="1711654082353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$rf_test.coverage" NAME="rf_test Coverage Results" MODIFIED="1717777152909" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Models/New Version/test_feature_enginneering" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$novo.coverage" NAME="novo Coverage Results" MODIFIED="1710849661936" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset" />
-    <SUITE FILE_PATH="coverage/Hybrid_Approach$RandomForest.coverage" NAME="RandomForest Coverage Results" MODIFIED="1716075902756" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset/Direito" />
+    <SUITE FILE_PATH="coverage/Hybrid_Approach$RandomForest.coverage" NAME="RandomForest Coverage Results" MODIFIED="1719336274979" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Models/New Version" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$csv_to_database.coverage" NAME="csv_to_database Coverage Results" MODIFIED="1711390060327" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/database" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$nova_Regra.coverage" NAME="nova-Regra Coverage Results" MODIFIED="1711544065557" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset/catboost_info" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$voting.coverage" NAME="voting Coverage Results" MODIFIED="1717584319616" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Models/New Version" />
@@ -558,22 +579,22 @@
     <SUITE FILE_PATH="coverage/Hybrid_Approach$testar_rules.coverage" NAME="testar_rules Coverage Results" MODIFIED="1712592776821" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$xgboost_5fold.coverage" NAME="xgboost_5fold Coverage Results" MODIFIED="1711643447585" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$all_data.coverage" NAME="all_data Coverage Results" MODIFIED="1711393046585" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/database" />
-    <SUITE FILE_PATH="coverage/Hybrid_Approach$mqtt.coverage" NAME="mqtt Coverage Results" MODIFIED="1718703997717" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/App/MQTT" />
+    <SUITE FILE_PATH="coverage/Hybrid_Approach$mqtt.coverage" NAME="mqtt Coverage Results" MODIFIED="1718705044355" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/App/MQTT" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$best_time_interval.coverage" NAME="best_time_interval Coverage Results" MODIFIED="1715596387013" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset/Direito" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$knn.coverage" NAME="knn Coverage Results" MODIFIED="1710439366523" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$random_forest.coverage" NAME="random_forest Coverage Results" MODIFIED="1711645290144" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset" />
-    <SUITE FILE_PATH="coverage/Hybrid_Approach$principal.coverage" NAME="principal Coverage Results" MODIFIED="1718630967638" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/App" />
-    <SUITE FILE_PATH="coverage/Hybrid_Approach$CatBoost.coverage" NAME="CatBoost Coverage Results" MODIFIED="1716140415294" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset/Direito" />
+    <SUITE FILE_PATH="coverage/Hybrid_Approach$principal.coverage" NAME="principal Coverage Results" MODIFIED="1718705038290" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/App" />
+    <SUITE FILE_PATH="coverage/Hybrid_Approach$CatBoost.coverage" NAME="CatBoost Coverage Results" MODIFIED="1719337010304" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Models/New Version" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$try_sha.coverage" NAME="try_sha Coverage Results" MODIFIED="1716821809941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset/Direito" />
-    <SUITE FILE_PATH="coverage/Hybrid_Approach$test.coverage" NAME="test Coverage Results" MODIFIED="1718703988773" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/App" />
-    <SUITE FILE_PATH="coverage/Hybrid_Approach$XGBoost.coverage" NAME="XGBoost Coverage Results" MODIFIED="1717540576118" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Models/New Version" />
+    <SUITE FILE_PATH="coverage/Hybrid_Approach$test.coverage" NAME="test Coverage Results" MODIFIED="1719330676480" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Models/New Version" />
+    <SUITE FILE_PATH="coverage/Hybrid_Approach$XGBoost.coverage" NAME="XGBoost Coverage Results" MODIFIED="1719338716813" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Models/New Version" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$LightGBM.coverage" NAME="LightGBM Coverage Results" MODIFIED="1713122550103" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset/PCA" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$gbm_test.coverage" NAME="gbm_test Coverage Results" MODIFIED="1717776119873" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Models/New Version/test_feature_enginneering" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$xgboost.coverage" NAME="xgboost Coverage Results" MODIFIED="1709906291038" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$voting_classifier.coverage" NAME="voting_classifier Coverage Results" MODIFIED="1711032510997" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$scratch.coverage" NAME="scratch Coverage Results" MODIFIED="1709815800801" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$failure_report.coverage" NAME="failure_report Coverage Results" MODIFIED="1712078865323" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/database" />
-    <SUITE FILE_PATH="coverage/Hybrid_Approach$GBM.coverage" NAME="GBM Coverage Results" MODIFIED="1718703799449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Models/New Version" />
+    <SUITE FILE_PATH="coverage/Hybrid_Approach$GBM.coverage" NAME="GBM Coverage Results" MODIFIED="1719333872275" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Models/New Version" />
     <SUITE FILE_PATH="coverage/Hybrid_Approach$new_way.coverage" NAME="new_way Coverage Results" MODIFIED="1710859816033" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Metro_Dataset" />
   </component>
 </project>

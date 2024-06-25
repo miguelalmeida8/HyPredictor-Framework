@@ -1,21 +1,13 @@
 import pandas as pd
-import seaborn as sns
 import numpy as np
-import matplotlib.pyplot as plt
-import os
-import zipfile
-from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 from sklearn.metrics import make_scorer, recall_score
 import joblib
-import lightgbm as lgb
-from catboost import CatBoostClassifier
-import xgboost as xgb
 
 DATA = r'C:\Users\migue\Desktop\metropt_dataset\MetroPT3(AirCompressor).csv'
 
@@ -267,23 +259,25 @@ y_train = train_data['failure']  # Target variable for training set
 x_test = test_data.drop(columns=['failure'])  # Features for test set
 y_test = test_data['failure']  # Target variable for test set
 
-scoring = make_scorer(recall_score)
+scoring = make_scorer(recall_score, zero_division=1)
 
 print(x_train.columns)
 
 
 # Define the parameter grid for Random Forest
 param_grid = {
-    'n_estimators': [100, 200, 300, 400, 500],
-    'max_depth': [1, 10, None],  # Adding more depth options
-    'bootstrap': [True, False],  # Adding bootstrap parameter
+    'n_estimators': [200, 300],
+    'max_depth': [1, 10],
+    'bootstrap': [True, False],
 }
 
 # Create LightGBM Classifier
 model = RandomForestClassifier()
 
+tscv = TimeSeriesSplit(n_splits=5)
+
 # Create Grid Search
-grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring=scoring, verbose=5)
+grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=tscv, scoring=scoring, verbose=5)
 
 # Fit the grid search to the training data
 grid_search.fit(x_train, y_train)
@@ -355,8 +349,6 @@ for idx, pred in enumerate(y_test_pred):
 print("Index of the first failure prediction in the test data:", failure_index)
 
 
-
-
 import lime
 import lime.lime_tabular
 
@@ -364,70 +356,6 @@ import lime.lime_tabular
 explainer = lime.lime_tabular.LimeTabularExplainer(training_data=x_train.values,
                                                    mode='classification',
                                                    feature_names=x_train.columns.tolist())
-'''
-import dill
-
-# Save the explainer object to a file using dill
-with open('explainer_lime.pkl', 'wb') as f:
-    dill.dump(explainer, f)
-
-
-# Select a specific instance from your test dataset for explanation
-#instance_index = 26610  # You can choose any index from your test dataset
-instance_index = 293851
-instance = x_test.iloc[[instance_index]].values[0]
-
-# Get the prediction for the selected instance
-prediction = best_model.predict_proba(instance.reshape(1, -1))[0]
-
-# Explain the prediction using LIME
-explanation = explainer.explain_instance(instance, best_model.predict_proba, num_features=len(x_train.columns))
-
-# Visualize the explanation
-explanation.show_in_notebook()
-
-# Save the explanation to an HTML file
-explanation.save_to_file('explanation.html')
-
-# Open the HTML file in a web browser
-import webbrowser
-webbrowser.open('explanation.html')
-
-# Assume explanation is the LIME explanation object
-prediction_probabilities = explanation.predict_proba
-
-# Print the prediction probabilities
-print("Prediction Probabilities:", prediction_probabilities)
-
-
-
-# Get the explanation in a format that can be plotted
-explanation_list = explanation.as_list()
-
-# Convert the explanation list to a dictionary for plotting
-explanation_dict = dict(explanation_list)
-
-# Plot the explanation
-plt.figure(figsize=(14, 12))
-plt.barh(list(explanation_dict.keys()), explanation_dict.values())
-plt.xlabel('Contribution')
-plt.ylabel('Feature')
-plt.title('Feature Contributions to Prediction')
-plt.show()
-
-
-
-####
-
-# Get the explanation list
-explanation_list = explanation.as_list()
-
-# Print the explanation list
-print("Rules applied by LIME:")
-for feature, weight in explanation_list:
-    print(f"Feature: {feature}, Weight: {weight}")
-
-'''
 
 #################    RULES    ###########################333
 
@@ -513,9 +441,9 @@ plt.title("Confusion Matrix")
 plt.show()
 
 
-
+'''
 if test_recall > 0 and test_precision > 0:
     print("\nSalvou o Modelo")
     joblib.dump(best_model, 'best_model__random_forest.pkl')
-
+'''
 
