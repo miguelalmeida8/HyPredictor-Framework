@@ -1,0 +1,8 @@
+
+
+# Exclude specific directories from language statistics
+docs/* linguist-documentation
+examples/* linguist-documentation
+
+# Explicitly mark .py files as Python
+*.py linguist-language=Python
