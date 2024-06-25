@@ -14,7 +14,6 @@ DATA = r'C:\Users\migue\Desktop\metropt_dataset\MetroPT3(AirCompressor).csv'
 
 data = pd.read_csv(DATA, na_values="na")
 
-
 import pandas as pd
 
 # Creating the failure report DataFrame
