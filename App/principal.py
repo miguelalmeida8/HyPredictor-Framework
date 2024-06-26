@@ -26,6 +26,8 @@ reservoirs = 0.00
 towers = 0.00
 nr = 21
 prediction_probabilities = 0
+last_train_data_str = '2020-01-01T00:00'
+last_train_data = datetime.datetime.strptime(last_train_data_str, '%Y-%m-%dT%H:%M')
 
 v_oil_temperature = []
 v_dv_pressure = []
@@ -312,7 +314,7 @@ def add_failure_report():
 
 @app.route('/submit_form', methods=['POST'])
 def submit_form():
-    global nr, model, explainer
+    global nr, model, explainer, last_train_data
     if request.method == 'POST':
         try:
             conn = psycopg2.connect(
@@ -348,12 +350,12 @@ def submit_form():
             SET failure = 
                 CASE
                     WHEN timestamp BETWEEN %s AND %s THEN 1
-                    WHEN timestamp < %s THEN 0
+                    WHEN timestamp < %s AND timestamp > %s THEN 0
                     ELSE failure
                 END;
             """.format(schema_name)
 
-            cur.execute(update_query, (start_date, end_date, start_date))
+            cur.execute(update_query, (start_date, end_date, start_date, last_train_data))
 
             # Commit transaction
             conn.commit()
@@ -362,15 +364,25 @@ def submit_form():
             query = """
                 SELECT * 
                 FROM {}.test_data
-                WHERE timestamp < %s
+                WHERE timestamp < %s AND timestamp > %s
             """.format(schema_name)
 
             # Fetch updated dataset from the database
-            df = pd.read_sql(query, conn, params=[end_date])
+            df = pd.read_sql(query, conn, params=[end_date, last_train_data])
             conn.close()
 
             # Drop unnecessary columns
             df.drop(columns=['id', 'timestamp'], inplace=True)
+
+            df.rename(columns={
+                'h1': 'median_H1',
+                'dv_pressure': 'median_DV_pressure',
+                'motor_current': 'median_Motor_current',
+                'oil_temperature': 'median_Oil_temperature',
+                'reservoirs': 'median_Reservoirs',
+                'tp2': 'median_TP2',
+                'towers': 'median_Towers',
+            }, inplace=True)
 
             # Prepare features and target variable
             X = df.drop(columns=['failure'])  # Features
@@ -378,6 +390,8 @@ def submit_form():
 
             # Retrain the model
             model.fit(X, y)
+
+            last_train_data = end_date
 
             explainer = lime.lime_tabular.LimeTabularExplainer(training_data=X.values,
                                                                mode='classification',

@@ -10,6 +10,8 @@ import dill
 import numpy as np
 import matplotlib.pyplot as plt
 import json
+import lime.lime_tabular
+import os
 
 app = Flask(__name__)
 
@@ -24,6 +26,8 @@ reservoirs = 0.00
 towers = 0.00
 nr = 21
 prediction_probabilities = 0
+last_train_data_str = '2020-01-01T00:00'
+last_train_data = datetime.datetime.strptime(last_train_data_str, '%Y-%m-%dT%H:%M')
 
 v_oil_temperature = []
 v_dv_pressure = []
@@ -108,7 +112,7 @@ with open(explainer_file_path, 'rb') as f:
 
 
 def generate_explanation(df):
-    global explanation_text, prediction_probabilities
+    global explanation_text, prediction_probabilities, explainer
 
     # Generate Lime explanation
     explanation = explainer.explain_instance(df.values[0], model.predict_proba, num_features=7)
@@ -161,11 +165,8 @@ def feature_engineering(df):
 
     return df
 
-import time
-execution_times = []
 
 def on_message(client, userdata, message):
-
     Batch_size = 10
     global data_window
     global v_oil_temperature, v_dv_pressure, v_motor_current, v_tp2, v_h1, v_reservoirs, v_towers, v_predictions, v_timestamps
@@ -234,21 +235,10 @@ def on_message(client, userdata, message):
     towers = df['median_Towers'].iloc[-1]
     prediction = int(prediction)
 
-    start_time = time.time()
     # Generate LIME explanation
     generate_explanation(df)
 
-    end_time = time.time()
-    execution_time = end_time - start_time
-    execution_times.append(execution_time)
-    average_time = sum(execution_times) / len(execution_times)
-
-    print(f"Time taken for this execution: {execution_time:.4f} seconds")
-    print(f"Average time over {len(execution_times)} executions: {average_time:.4f} seconds")
-
     print(len(data_window))
-
-
 
     # Check if it's time to commit
     if len(data_window) % Batch_size == 0:
@@ -324,7 +314,7 @@ def add_failure_report():
 
 @app.route('/submit_form', methods=['POST'])
 def submit_form():
-    global nr, model
+    global nr, model, explainer, last_train_data
     if request.method == 'POST':
         try:
             conn = psycopg2.connect(
@@ -360,12 +350,12 @@ def submit_form():
             SET failure = 
                 CASE
                     WHEN timestamp BETWEEN %s AND %s THEN 1
-                    WHEN timestamp < %s THEN 0
+                    WHEN timestamp < %s AND timestamp > %s THEN 0
                     ELSE failure
                 END;
             """.format(schema_name)
 
-            cur.execute(update_query, (start_date, end_date, start_date))
+            cur.execute(update_query, (start_date, end_date, start_date, last_train_data))
 
             # Commit transaction
             conn.commit()
@@ -374,15 +364,25 @@ def submit_form():
             query = """
                 SELECT * 
                 FROM {}.test_data
-                WHERE timestamp < %s
+                WHERE timestamp < %s AND timestamp > %s
             """.format(schema_name)
 
             # Fetch updated dataset from the database
-            df = pd.read_sql(query, conn, params=[end_date])
+            df = pd.read_sql(query, conn, params=[end_date, last_train_data])
             conn.close()
 
             # Drop unnecessary columns
             df.drop(columns=['id', 'timestamp'], inplace=True)
+
+            df.rename(columns={
+                'h1': 'median_H1',
+                'dv_pressure': 'median_DV_pressure',
+                'motor_current': 'median_Motor_current',
+                'oil_temperature': 'median_Oil_temperature',
+                'reservoirs': 'median_Reservoirs',
+                'tp2': 'median_TP2',
+                'towers': 'median_Towers',
+            }, inplace=True)
 
             # Prepare features and target variable
             X = df.drop(columns=['failure'])  # Features
@@ -390,6 +390,12 @@ def submit_form():
 
             # Retrain the model
             model.fit(X, y)
+
+            last_train_data = end_date
+
+            explainer = lime.lime_tabular.LimeTabularExplainer(training_data=X.values,
+                                                               mode='classification',
+                                                               feature_names=X.columns.tolist())
 
 
             # Redirect to a success page or render a success message
