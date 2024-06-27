@@ -102,6 +102,8 @@ data_window = deque(maxlen=900)  # Assuming 10 seconds * 900 = 15 minutes
 
 # Load machine learning model
 model = joblib.load('models/best_model__gbm.pkl')
+# Set warm_start to True
+model.set_params(warm_start=True)
 
 # Lime explainer file
 explainer_file_path = 'models/explainer_gbm.pkl'
@@ -388,8 +390,13 @@ def submit_form():
             X = df.drop(columns=['failure'])  # Features
             y = df['failure']  # Target variable
 
+            # Increment the number of estimators
+            model.set_params(n_estimators=model.n_estimators + 50)
+
             # Retrain the model
             model.fit(X, y)
+
+            print('Model Retrained')
 
             last_train_data = end_date
 
