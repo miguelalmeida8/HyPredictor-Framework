@@ -15,7 +15,7 @@ Welcome to the repository for the comprehensive Failure Prediction and Reporting
 
 ## Performance Highlights
 
-The hybrid approach significantly improves prediction accuracy, achieving an F1 Score of up to 93% and a Recall of 91% in failure prediction. By integrating domain-specific rules, the system's performance was enhanced by up to 28% in the F1 Score for some prediction models. This adaptive system not only boosts prediction accuracy but also fosters proactive maintenance, reducing downtime and operational costs.
+The hybrid approach significantly improves prediction accuracy, achieving an F1 Score of up to 90% and a Recall of 92% in failure prediction. By integrating domain-specific rules, the system's performance was enhanced by up to 28% in the F1 Score for some prediction models. This adaptive system not only boosts prediction accuracy but also fosters proactive maintenance, reducing downtime and operational costs.
 
 ## Comparison of Model Performance Before and After Rules
 
